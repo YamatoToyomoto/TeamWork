@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net10.0": {
       "Humanizer.Core/2.14.1": {
@@ -2400,23 +2400,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ryubi-Shimoji\\.nuget\\packages\\": {},
+    "C:\\Users\\Yamato-Toyomoto\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ryubi-Shimoji\\Desktop\\TeamWork\\WebApp\\WebApp.csproj",
+      "projectUniqueName": "C:\\Users\\Yamato-Toyomoto\\Desktop\\WebApp\\WebApp\\WebApp.csproj",
       "projectName": "WebApp",
-      "projectPath": "C:\\Users\\Ryubi-Shimoji\\Desktop\\TeamWork\\WebApp\\WebApp.csproj",
-      "packagesPath": "C:\\Users\\Ryubi-Shimoji\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ryubi-Shimoji\\Desktop\\TeamWork\\WebApp\\obj\\",
+      "projectPath": "C:\\Users\\Yamato-Toyomoto\\Desktop\\WebApp\\WebApp\\WebApp.csproj",
+      "packagesPath": "C:\\Users\\Yamato-Toyomoto\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Yamato-Toyomoto\\Desktop\\WebApp\\WebApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Ryubi-Shimoji\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Yamato-Toyomoto\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2444,7 +2444,7 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net10.0": {
@@ -2499,7 +2499,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
