@@ -1,3 +1,5 @@
+using Npgsql;
+
 namespace WebApp
 {
     public class Program
@@ -9,13 +11,29 @@ namespace WebApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            var connectionString =
+                builder.Configuration.GetConnectionString("DefaultConnection");
+
+            try
+            {
+                using var connection = new NpgsqlConnection(connectionString);
+
+                connection.Open();
+
+                Console.WriteLine("DB接続成功！");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("DB接続失敗");
+                Console.WriteLine(ex.Message);
+            }
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -25,6 +43,7 @@ namespace WebApp
             app.UseAuthorization();
 
             app.MapStaticAssets();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
