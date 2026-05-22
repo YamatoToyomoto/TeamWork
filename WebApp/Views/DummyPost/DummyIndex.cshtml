@@ -1,0 +1,16 @@
+﻿@model List<WebApp.Models.Post>
+
+<h1>投稿一覧</h1>
+
+@foreach (var post in Model)
+{
+    <div>
+        <h2>@post.PlaceName</h2>
+
+        <p>@post.LocationText</p>
+
+        <img src="@post.ImagePath" width="200" />
+
+        <p>@post.CreatedAt</p>
+    </div>
+}

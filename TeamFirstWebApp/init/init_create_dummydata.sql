@@ -1,0 +1,19 @@
+INSERT INTO posts (
+    place_name,
+    location_text,
+    image_path,
+    created_at
+)
+VALUES
+(
+    '国際通り',
+    '入口付近の自動販売機の横',
+    'images/kokusai1.jpg',
+    CURRENT_TIMESTAMP
+),
+(
+    '美ら海水族館',
+    '駐車場近くの休憩スペース',
+    'images/churaumi1.jpg',
+    CURRENT_TIMESTAMP
+);
