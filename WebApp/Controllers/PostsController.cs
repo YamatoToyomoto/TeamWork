@@ -24,6 +24,8 @@ namespace WebApp.Controllers
             return View(post);
         }
 
+
+        //投稿画面表示
         [HttpGet]
         public IActionResult Create()
         {
@@ -31,6 +33,7 @@ namespace WebApp.Controllers
             return View();
         }
 
+        //投稿
         [HttpPost]
         public IActionResult Create(Post post)
         {
@@ -53,6 +56,7 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+
         public IActionResult Details(int id)
         {
 
@@ -68,5 +72,53 @@ namespace WebApp.Controllers
             return View(post);
         }
 
+
+        //削除
+        public IActionResult Delete(int id)
+        {
+            var post = _db.Posts.Find(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            // DBから削除
+            _db.Posts.Remove(post);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+
+        //編集表示
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var post = _db.Posts.Find(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View(post);
+        }
+
+        public IActionResult Edit(Post post)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(post);
+            }
+            //投稿日時を現在時刻に設定
+            post.CreatedAt = DateTime.UtcNow;
+
+            //DB更新
+            _db.Posts.Update(post);
+
+            //DB保存
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
     }
 }

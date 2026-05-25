@@ -1,41 +1,46 @@
 ﻿@model WebApp.Models.Post
 
-<h1>ゴミ箱情報投稿</h1>
+<h1>投稿編集</h1>
 
-<!-- 投稿フォーム -->
 <form method="post">
+    <!-- 投稿ID保持 -->
+    <input type="hidden" asp-for="Id" />
+
     <!-- 観光地 -->
     <div>
         <label>観光地</label>
         <input asp-for="PlaceName" />
-        <!-- エラーメッセージ -->
-        <span asp-validation-for="PlaceName"></span>
+        <span asp-validation-for="PlaceName"
+        class=" text-danger">
+        </span>
     </div>
     <br />
 
-    <!-- ごみ箱の場所説明 -->
+    <!-- 場所説明 -->
     <div>
+
         <label>場所説明</label>
+
         <textarea asp-for="LocationText"></textarea>
-        <span asp-validation-for="LocationText"></span>
+
+        <span asp-validation-for="LocationText"
+              class="text-danger">
+        </span>
+
     </div>
 
     <br />
 
-    <!-- 画像パス -->
+    <!-- 画像 -->
     <div>
         <label>画像パス</label>
-
         <input asp-for="ImagePath" />
     </div>
-
     <br />
 
-    <!-- 投稿ボタン -->
+    <!-- 更新ボタン -->
     <button type="submit">
-        投稿
+        更新
     </button>
 
 </form>
-
-<a href="/Posts">一覧</a>
