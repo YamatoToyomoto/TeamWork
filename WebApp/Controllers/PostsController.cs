@@ -56,7 +56,7 @@ namespace WebApp.Controllers
         public IActionResult Details(int id)
         {
 
-            var post = _context.Posts
+            var post = _db.Posts
                .FirstOrDefault(p => p.Id == id);
 
             if (post == null)
