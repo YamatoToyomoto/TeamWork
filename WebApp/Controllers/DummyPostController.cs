@@ -8,10 +8,10 @@ namespace WebApp.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public DummyPostController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        //public DummyPostController(ApplicationDbContext context)
+        //{
+        //    _context = context;
+        //}
 
         public IActionResult DummyIndex()
         {
