@@ -53,11 +53,18 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Details()
+        public IActionResult Details(int id)
         {
 
-            //var post = _db.Posts.Find(id)
-            var post = _db.Posts.ToList();
+            var post = _context.Posts
+               .FirstOrDefault(p => p.Id == id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+
             return View(post);
         }
 
