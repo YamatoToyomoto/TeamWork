@@ -12,7 +12,7 @@
 
         <img src="@post.ImagePath" width="200" />
 
-        <p>@post.CreatedAt</p>
+        <p>@post.CreatedAt.ToLocalTime()</p>
 
 
         <a asp-controller="Posts"
