@@ -15,7 +15,9 @@
         <p>@post.CreatedAt</p>
 
 
-        <a href="/Posts/Details/@post.Id">
+        <a asp-controller="Posts"
+           asp-action="Details"
+           asp-route-id="@post.Id">
             詳細
         </a>
     </div>
