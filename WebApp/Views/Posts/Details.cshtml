@@ -1,14 +1,33 @@
-﻿@model WebApp.Models.Post
+﻿@model WebApp.ViewModels.PostDetailsViewModel
+
 
 <h1>投稿詳細</h1>
 
-<h2>@Model.PlaceName</h2>
+<h2>@Model.Post.PlaceName</h2>
 
-<p>@Model.LocationText</p>
+<p>@Model.Post.LocationText</p>
 
-<img src="@Model.ImagePath" width="300" />
+<img src="@Url.Content(Model.Post.ImagePath)"
+     width="300" />
 
-<p>@Model.CreatedAt</p>
+<p>@Model.Post.CreatedAt</p>
+
+<hr />
+
+<h3>コメント一覧</h3>
+
+@foreach (var comment in Model.Comments)
+{
+    <div>
+        <p>@comment.CommentText</p>
+
+        <small>
+            @comment.CreatedAt
+        </small>
+    </div>
+
+    <hr />
+}
 
 <!-- 編集画面へ -->
 <a asp-action="Edit"
