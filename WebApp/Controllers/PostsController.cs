@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -64,8 +66,18 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            var comments = _db.Comments
+               .Where(c => c.PostId == id)
+               .ToList();
 
-            return View(post);
+            var viewModel = new PostDetailsViewModel
+            {
+                Post = post,
+                Comments = comments
+            };
+
+
+            return View(viewModel);
         }
 
     }
