@@ -1,12 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApp.Data;
 
 namespace WebApp.Controllers
 {
     public class PostsController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public PostsController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var post = _context.Posts.ToList();
+
+            return View(post);
         }
 
         public IActionResult Create()
@@ -16,7 +26,11 @@ namespace WebApp.Controllers
 
         public IActionResult Details()
         {
-            return View();
+
+            //var post = _db.Posts.Find(id)
+            var post = _context.Posts.ToList();
+            return View(post);
         }
+
     }
 }
