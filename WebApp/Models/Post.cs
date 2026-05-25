@@ -28,6 +28,6 @@ namespace WebApp.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }
