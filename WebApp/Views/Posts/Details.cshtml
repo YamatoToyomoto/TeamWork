@@ -14,6 +14,25 @@
 
 <hr />
 
+@*コメント追加*@
+<h2>コメント追加</h2>
+<form asp-action="AddComment"method="post">
+    <input type="hidden"
+           name="postId"
+           value="@Model.Post.Id" />
+
+    <textarea name="commentText"
+              rows="4"
+              cols="50"
+              required></textarea>
+
+    <br/>
+
+
+    <button type="submit">コメント追加</button>
+
+</form>
+
 <h3>コメント一覧</h3>
 
 @foreach (var comment in Model.Comments)
@@ -22,8 +41,24 @@
         <p>@comment.CommentText</p>
 
         <small>
-            @comment.CreatedAt
+            @comment.CreatedAt.ToLocalTime()
         </small>
+
+
+        @* コメント削除 *@
+        <form asp-action="DeleteComment"method="post">
+
+            <input type="hidden"
+                   name="id"
+                   value="@comment.Id" />
+
+            <input type="hidden"
+                   name="postId"
+                   value="@Model.Post.Id" />
+
+            <button type="submit">削除</button>
+            
+        </form>
     </div>
 
     <hr />

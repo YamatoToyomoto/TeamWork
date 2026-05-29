@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Models;
@@ -47,6 +48,7 @@ namespace WebApp.Controllers
 
             //投稿日時を現在時刻に設定
             post.CreatedAt = DateTime.UtcNow;
+
 
             //テーブルに追加
             _db.Posts.Add(post);
@@ -131,6 +133,55 @@ namespace WebApp.Controllers
             _db.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        //コメントの追加
+        public IActionResult AddComment(int postId, string? commentText)
+        {
+            if (string.IsNullOrWhiteSpace(commentText))
+            {
+                TempData["ErrorMessage"]
+                    = "コメントを入力してください";
+
+                return RedirectToAction(
+                    "Details",
+                    new { id = postId });
+            }
+
+            var comment = new Comment
+            {
+                PostId = postId,
+                CommentText = commentText,
+                //CreatedAt = DateTime.UtcNow
+            };
+
+            comment.CreatedAt = DateTime.UtcNow;
+
+            _db.Comments.Add(comment);
+
+            _db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = postId });
+        }
+
+
+        [HttpPost]
+        //コメントの削除
+        public IActionResult DeleteComment(int id, int postId)
+        {
+            var comment = _db.Comments
+                .FirstOrDefault(c => c.Id == id);
+
+            if (comment != null)
+            {
+                _db.Comments.Remove(comment);
+
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Details", new { id = postId });
         }
     }
 }
