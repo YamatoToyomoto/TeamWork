@@ -14,8 +14,8 @@ namespace WebApp.Models
         public int Id { get; set; }
 
         [Column("place_name")]
-        [Required(ErrorMessage = "観光地名を入力してください")]
-        [StringLength(100, ErrorMessage = "100文字以内で入力してください")]
+        
+
         public string PlaceName { get; set; } = string.Empty;
 
         [Column("location_text")]

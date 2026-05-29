@@ -2,7 +2,7 @@
 
 namespace WebApp.Models
 {
-
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("comments")]
@@ -16,11 +16,13 @@ namespace WebApp.Models
         public int PostId { get; set; }
 
         [Column("comment_text")]
-        public string CommentText { get; set; }
+        [Required(ErrorMessage = "場所説明を入力してください")]
+        [StringLength(300, ErrorMessage = "300文字以内で入力してください")]
+        public string CommentText { get; set; } = "";
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
-        public Post Post { get; set; }
+        public Post? Post { get; set; }
     }
 }
