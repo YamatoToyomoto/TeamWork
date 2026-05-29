@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using WebApp.Models;
 using WebApp.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Controllers
 {
@@ -38,12 +39,35 @@ namespace WebApp.Controllers
 
         //投稿
         [HttpPost]
-        public IActionResult Create(Post post)
+        public IActionResult Create(Post post, IFormFile imageFile)
         {
             //入力チェック    
             if(!ModelState.IsValid)
             {
                 return View(post);
+            }
+
+
+            if (imageFile != null)
+            {
+                // ファイル名取得
+                string fileName = imageFile.FileName;
+
+                //保存パス
+                string path = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot/images",
+                    fileName);
+
+                //フォルダに保存
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    imageFile.CopyTo(stream);
+                }
+
+                //DBへ保存するパス
+                post.ImagePath = "/images/" + fileName;
+
             }
 
             //投稿日時を現在時刻に設定
@@ -76,6 +100,7 @@ namespace WebApp.Controllers
                .Where(c => c.PostId == id)
                .ToList();
 
+
             var viewModel = new PostDetailsViewModel
             {
                 Post = post,
@@ -94,6 +119,24 @@ namespace WebApp.Controllers
             if (post == null)
             {
                 return NotFound();
+            }
+
+            //画像パスがある場合
+            if(!string.IsNullOrEmpty(post.ImagePath))
+            {
+                //wwwrootからの物理パス生成
+                string imagePath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    post.ImagePath.TrimStart('/')
+                    );
+
+                // ファイル存在確認
+                if (System.IO.File.Exists(imagePath))
+                {
+                    // ファイル削除
+                    System.IO.File.Delete(imagePath);
+                }
             }
 
             // DBから削除

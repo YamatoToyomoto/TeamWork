@@ -3,7 +3,11 @@
 <h1>ゴミ箱情報投稿</h1>
 
 <!-- 投稿フォーム -->
-<form method="post">
+<form method="post" enctype="multipart/form-data">
+
+    <div asp-validation-summary="All"
+         class="text-danger">
+    </div>
     <!-- 観光地 -->
     <div>
         <label>観光地</label>
@@ -19,17 +23,22 @@
         <textarea asp-for="LocationText"></textarea>
         <span asp-validation-for="LocationText"></span>
     </div>
-
     <br />
 
     <!-- 画像パス -->
     <div>
-        <label>画像パス</label>
-
-        <input asp-for="ImagePath" />
+        <label>画像アップロード</label>
+        <input type="file" name="imageFile" />
     </div>
-
     <br />
+
+    <!-- 画像プレビュー -->
+    <div>
+
+        <img id="preview"
+             style="display:none; max-width:300px;" />
+
+    </div>
 
     <!-- 投稿ボタン -->
     <button type="submit">
@@ -37,5 +46,38 @@
     </button>
 
 </form>
+<script>
+
+    // file input取得
+    const fileInput =
+        document.querySelector('input[type="file"]');
+
+    // img取得
+    const preview =
+        document.getElementById('preview');
+
+    // ファイル選択時
+    fileInput.addEventListener('change', function (event)
+    {
+        // 選択ファイル取得
+        const file = event.target.files[0];
+
+        // ファイル存在時
+        if (file)
+        {
+            // 一時URL生成
+            const imageUrl =
+                URL.createObjectURL(file);
+
+            // imgへ設定
+            preview.src = imageUrl;
+
+            // 表示
+            preview.style.display = 'block';
+        }
+    });
+
+</script>
+
 
 <a href="/Posts">一覧</a>
