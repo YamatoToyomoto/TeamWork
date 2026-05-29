@@ -10,13 +10,17 @@
 <img src="@Url.Content(Model.Post.ImagePath)"
      width="300" />
 
-<p>@Model.Post.CreatedAt</p>
+<p>
+    @(Model.Post.CreatedAt
+        .ToLocalTime()
+        .ToString("yyyy/MM/dd"))
+</p>
 
 <hr />
 
 @*コメント追加*@
 <h2>コメント追加</h2>
-<form asp-action="AddComment"method="post">
+<form asp-action="AddComment" method="post">
     <input type="hidden"
            name="postId"
            value="@Model.Post.Id" />
@@ -41,12 +45,14 @@
         <p>@comment.CommentText</p>
 
         <small>
-            @comment.CreatedAt.ToLocalTime()
+            @(comment.CreatedAt
+        .ToLocalTime()
+        .ToString("yyyy/MM/dd"))
         </small>
 
 
         @* コメント削除 *@
-        <form asp-action="DeleteComment"method="post">
+        <form asp-action="DeleteComment" method="post">
 
             <input type="hidden"
                    name="id"
