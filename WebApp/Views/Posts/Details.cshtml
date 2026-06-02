@@ -5,7 +5,14 @@
 
 <h2>@Model.Post.PlaceName</h2>
 
-<p>@Model.Post.LocationText</p>
+<p id="locationText">@Model.Post.LocationText</p>
+
+<button type="button" id="translateButton">
+    翻訳
+</button>
+
+<div id="translatedResult" style="margin-top:10px; color: #2b6cb0;">
+</div>
 
 <img src="@Url.Content(Model.Post.ImagePath)"
      width="300" />
@@ -86,3 +93,69 @@
 <a asp-action="Index">
     一覧へ戻る
 </a>
+
+@section Scripts {
+    <script>
+        // 翻訳ボタン取得
+        const button = document.getElementById("translateButton");
+
+        // 翻訳結果表示エリア取得
+        const resultDiv = document.getElementById("translatedResult");
+
+        // ボタンが押されたときの処理
+        button.addEventListener("click", async () => {
+
+            // 翻訳対象テキスト取得
+            const text = document.getElementById("locationText")?.innerText;
+
+            // 現在選択されている言語（localStorageから取得）
+            const language = localStorage.getItem("language") ?? "en";
+            const ui = translations[language] ?? translations.en;
+
+            // テキストがなければ処理終了
+            if (!text) return;
+
+            // Prompt APIが使えるかチェック
+            if (typeof LanguageModel === "undefined") {
+                alert("Prompt APIが使えません");
+                return;
+            }
+
+            // モデルが利用可能か確認
+            try {
+                const availability = await LanguageModel.availability();
+                if (availability !== "available") {
+                    alert("AIモデルが利用できません");
+                    return;
+                }
+
+                // 翻訳中メッセージ表示
+                resultDiv.innerText = ui.translating;
+
+                // AIセッション開始（翻訳モデル起動）
+                const session = await LanguageModel.create({
+                    outputLanguage: language
+                });
+
+                // AIに渡すプロンプト（翻訳指示）
+                const prompt = `
+                    Translate the following Japanese text into ${language}.
+                    Return only the translated text.
+                    Text: ${text}`;
+
+                // AIに翻訳依頼
+                const result = await session.prompt(prompt);
+
+                // 結果表示
+                resultDiv.innerText = result;
+
+                // セッション終了（メモリ解放）
+                session.destroy();
+
+            } catch (err) {
+                console.error(err);
+                resultDiv.innerText = ui.error;
+            }
+        });
+    </script>
+}
