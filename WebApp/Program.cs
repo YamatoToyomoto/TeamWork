@@ -1,7 +1,7 @@
 using Npgsql;
-
 using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp
 {
@@ -19,6 +19,9 @@ namespace WebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Session機能追加
+            builder.Services.AddSession();
 
             var connectionString =
                 builder.Configuration.GetConnectionString("DefaultConnection");
@@ -48,6 +51,9 @@ namespace WebApp
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            // Session有効化
+            app.UseSession();
 
             app.UseAuthorization();
 
