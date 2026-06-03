@@ -6,6 +6,7 @@ using WebApp.Models;
 using WebApp.ViewModels;
 using Microsoft.AspNetCore.Http;
 
+
 namespace WebApp.Controllers
 {
     public class PostsController : Controller
@@ -13,10 +14,13 @@ namespace WebApp.Controllers
         //DB操作を行うための変数
         private readonly ApplicationDbContext _db;
 
+        private readonly IWebHostEnvironment _environment;
+
         //ApplicationDbContext を受け取る
-        public PostsController(ApplicationDbContext db)
+        public PostsController(ApplicationDbContext db, IWebHostEnvironment environment)
         {
             _db = db;
+            _environment = environment;
         }
 
         //投稿一覧画面を表示
@@ -206,39 +210,72 @@ namespace WebApp.Controllers
                 return View(post);
             }
 
-            // DBから取得
-            var dbPost = _db.Posts.Find(post.Id);
+            if (post.DeleteImage && post.ImageFile == null)
+            {
+                ModelState.AddModelError(
+                    "ImageFile",
+                    "画像を削除する場合は新しい画像を選択してください"
+                );
 
-            if (dbPost == null)
+                return View(post);
+            }
+
+            var target = _db.Posts.Find(post.Id);
+
+            if (target == null)
             {
                 return NotFound();
             }
 
-            // ログイン確認
-            var loginUserId = HttpContext.Session.GetInt32("UserId");
+            // テキスト更新
+            target.PlaceName = post.PlaceName;
+            target.LocationText = post.LocationText;
 
-            if (loginUserId == null)
+            // 画像削除
+            if (post.DeleteImage)
             {
-                return RedirectToAction("Login", "Account");
+                if (!string.IsNullOrEmpty(target.ImagePath))
+                {
+                    string oldPath = Path.Combine(
+                        _environment.WebRootPath,
+                        target.ImagePath.TrimStart('/'));
+
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
+
+                target.ImagePath = "";
             }
 
-            // 投稿者本人か確認
-            if (dbPost.UserId != loginUserId.Value)
+            // 新しい画像
+            if (post.ImageFile != null)
             {
-                return Unauthorized();
+                string fileName =
+                    Guid.NewGuid().ToString()
+                    + Path.GetExtension(post.ImageFile.FileName);
+
+                string savePath = Path.Combine(
+                    _environment.WebRootPath,
+                    "images",
+                    fileName);
+
+                using (var stream =
+                    new FileStream(savePath, FileMode.Create))
+                {
+                    post.ImageFile.CopyTo(stream);
+                }
+
+                target.ImagePath =
+                    "/images/" + fileName;
             }
-
-            // 編集可能項目だけ更新
-            dbPost.PlaceName = post.PlaceName;
-            dbPost.LocationText = post.LocationText;
-
-
-            // 必要なら画像も
-            dbPost.ImagePath = post.ImagePath;
 
             _db.SaveChanges();
 
-            return RedirectToAction("Details", new { id = dbPost.Id });
+            return RedirectToAction(
+                "Details",
+                new { id = target.Id });
         }
 
 

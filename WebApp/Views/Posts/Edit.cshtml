@@ -1,46 +1,253 @@
 ﻿@model WebApp.Models.Post
 
-<h1>投稿編集</h1>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/edit.css"
+          asp-append-version="true" />
+}
 
-<form method="post">
-    <!-- 投稿ID保持 -->
-    <input type="hidden" asp-for="Id" />
+<div class="edit-container">
 
-    <!-- 観光地 -->
-    <div>
-        <label>観光地</label>
-        <input asp-for="PlaceName" />
-        <span asp-validation-for="PlaceName"
-        class=" text-danger">
-        </span>
+    <div class="edit-card">
+
+        <h1>✏️ 投稿編集</h1>
+
+        <form method="post"
+              enctype="multipart/form-data"
+              id="editForm">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+
+                <label asp-for="PlaceName">
+                    📍 観光地
+                </label>
+
+                <input asp-for="PlaceName"
+                       class="form-input" />
+
+                <span asp-validation-for="PlaceName"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            <div class="form-group">
+
+                <label asp-for="LocationText">
+                    🗑 場所説明
+                </label>
+
+                <textarea asp-for="LocationText"
+                          class="form-textarea">
+                </textarea>
+
+                <span asp-validation-for="LocationText"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <div class="form-group" id="currentImageArea">
+
+                    <label>現在の画像</label>
+
+                    <br />
+
+                    <img src="@Model.ImagePath"
+                         class="preview-image" />
+
+                    <br /><br />
+
+                    <input asp-for="DeleteImage" id="deleteImageCheck" />
+
+                    <label asp-for="DeleteImage">
+                        この画像を削除する
+                    </label>
+
+                </div>
+            }
+
+            <div class="form-group">
+
+                <label>新しい画像</label>
+
+                <input asp-for="ImageFile"
+                       type="file"
+                       accept="image/*"
+                       id="imageInput"
+                       class="form-input" />
+
+                <span asp-validation-for="ImageFile"
+                      class="text-danger">
+                </span>
+
+                <div id="imageRequiredMessage"
+                     style="display:none;color:red;">
+                    新しい画像の選択が必要です
+                </div>
+
+                <br />
+
+                <button type="button"
+                        id="clearImageBtn"
+                        class="clear-btn"
+                        style="display:none;">
+                    選択解除
+                </button>
+
+                <br /><br />
+
+                <img id="imagePreview"
+                     class="preview-image"
+                     style="display:none;" />
+
+            </div>
+
+            <div class="button-group">
+
+                <button type="submit"
+                        class="save-btn">
+                    更新する
+                </button>
+
+                <a asp-action="Index"
+                   class="back-btn">
+
+                    一覧へ戻る
+
+                </a>
+
+            </div>
+
+        </form>
+
     </div>
-    <br />
 
-    <!-- 場所説明 -->
-    <div>
+</div>
 
-        <label>場所説明</label>
 
-        <textarea asp-for="LocationText"></textarea>
+@section Scripts {
 
-        <span asp-validation-for="LocationText"
-              class="text-danger">
-        </span>
+    <script>
 
-    </div>
+        const imageInput =
+            document.getElementById("imageInput");
 
-    <br />
+        imageInput.addEventListener("change", function (e) {
 
-    <!-- 画像 -->
-    <div>
-        <label>画像パス</label>
-        <input asp-for="ImagePath" />
-    </div>
-    <br />
+            const file = e.target.files[0];
 
-    <!-- 更新ボタン -->
-    <button type="submit">
-        更新
-    </button>
+            const preview =
+                document.getElementById("imagePreview");
 
-</form>
+            const currentImage =
+                document.getElementById("currentImageArea");
+
+            if (!file)
+            {
+                preview.style.display = "none";
+
+                if (currentImage)
+                {
+                    currentImage.style.display = "block";
+                }
+
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+
+                preview.src = event.target.result;
+
+                preview.style.display = "block";
+
+                document.getElementById("clearImageBtn")
+                        .style.display = "inline-block";
+
+                if (currentImage)
+                {
+                    currentImage.style.display = "none";
+                }
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+
+        const clearButton =
+        document.getElementById("clearImageBtn");
+
+        clearButton.addEventListener("click", function () {
+
+            imageInput.value = "";
+
+            const preview =
+                document.getElementById("imagePreview");
+
+            preview.src = "";
+
+            preview.style.display = "none";
+
+            clearButton.style.display = "none";
+
+            const currentImage =
+                document.getElementById("currentImageArea");
+
+            if (currentImage)
+            {
+                currentImage.style.display = "block";
+            }
+        });
+
+        const deleteCheck =
+        document.getElementById("deleteImageCheck");
+
+        const requiredMessage =
+            document.getElementById("imageRequiredMessage");
+
+        if (deleteCheck)
+        {
+            deleteCheck.addEventListener("change", function () {
+
+                if (this.checked)
+                {
+                    requiredMessage.style.display = "block";
+                }
+                else
+                {
+                    requiredMessage.style.display = "none";
+                }
+            });
+        }
+
+        const form =
+        document.getElementById("editForm");
+
+        form.addEventListener("submit", function (e) {
+
+            const deleteCheck =
+                document.getElementById("deleteImageCheck");
+
+            const imageInput =
+                document.getElementById("imageInput");
+
+            if (
+                deleteCheck.checked &&
+                imageInput.files.length === 0
+            ) {
+                alert(
+                    "画像を削除する場合は新しい画像を選択してください"
+                );
+
+                e.preventDefault();
+            }
+        });
+    </script>
+
+}
