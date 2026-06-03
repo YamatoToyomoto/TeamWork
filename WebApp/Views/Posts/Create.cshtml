@@ -1,83 +1,143 @@
 ﻿@model WebApp.Models.Post
 
-<h1>ゴミ箱情報投稿</h1>
+<div class="create-container">
 
-<!-- 投稿フォーム -->
-<form method="post" enctype="multipart/form-data">
+    <div class="page-header">
 
-    <div asp-validation-summary="All"
-         class="text-danger">
-    </div>
-    <!-- 観光地 -->
-    <div>
-        <label>観光地</label>
-        <input asp-for="PlaceName" />
-        <!-- エラーメッセージ -->
-        <span asp-validation-for="PlaceName"></span>
-    </div>
-    <br />
+        <div class="logo-area">
+            <div class="logo-icon">🗑</div>
 
-    <!-- ごみ箱の場所説明 -->
-    <div>
-        <label>場所説明</label>
-        <textarea asp-for="LocationText"></textarea>
-        <span asp-validation-for="LocationText"></span>
-    </div>
-    <br />
+            <div class="logo-text">
+                <h1>ゴミ箱アプリ</h1>
+                <p>新規投稿</p>
+            </div>
+        </div>
 
-    <!-- 画像パス -->
-    <div>
-        <label>画像アップロード</label>
-        <input type="file" name="imageFile" />
-    </div>
-    <br />
-
-    <!-- 画像プレビュー -->
-    <div>
-
-        <img id="preview"
-             style="display:none; max-width:300px;" />
+        <a asp-action="Index" class="back-link">
+            ← 一覧に戻る
+        </a>
 
     </div>
 
-    <!-- 投稿ボタン -->
-    <button type="submit">
-        投稿
-    </button>
+    <div class="form-area">
 
-</form>
+        <h2 class="page-title">
+            ゴミ箱情報を投稿
+        </h2>
+
+        <p class="page-subtitle">
+            ゴミ箱の位置情報を共有してください
+        </p>
+
+        <form asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+
+            <!-- 場所名 -->
+
+            <div class="form-group">
+                <label asp-for="PlaceName" class="form-label">
+                    場所
+                    <span class="required">*</span>
+                </label>
+
+                <input asp-for="PlaceName"
+                       class="form-control"
+                       placeholder="例：札幌駅南口" />
+
+                <span asp-validation-for="PlaceName"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- 場所説明 -->
+
+            <div class="form-group">
+                <label asp-for="LocationText" class="form-label">
+                    場所説明
+                    <span class="required">*</span>
+                </label>
+
+                <textarea asp-for="LocationText"
+                          class="form-control"
+                          placeholder="場所の説明を入力してください">
+                </textarea>
+
+                <span asp-validation-for="LocationText"
+                      class="text-danger"></span>
+            </div>
+
+            <!-- 画像 -->
+
+            <div class="form-group">
+
+                <label for="imageFile" class="form-label">
+                    写真をアップロード
+                </label>
+
+                <input type="file"
+                       id="imageFile"
+                       name="imageFile"
+                       accept=".jpg,.jpeg,.png"
+                       hidden>
+
+                <div class="upload-area"
+                     onclick="document.getElementById('imageFile').click()">
+
+                    <div class="upload-icon">
+                        📷
+                    </div>
+
+                    <div class="upload-text">
+                        クリックして写真を選択
+                    </div>
+
+                    <div class="upload-subtext" id="fileName">
+                        JPG・PNG対応
+                    </div>
+
+                </div>
+
+                <img id="preview"
+                     style="
+                display:none;
+                max-width:300px;
+                margin-top:15px;
+                border-radius:12px;" />
+
+            </div>
+
+            <button type="submit" class="submit-btn">
+                投稿する
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
 <script>
+    document.getElementById("imageFile")
+        .addEventListener("change", function () {
 
-    // file input取得
-    const fileInput =
-        document.querySelector('input[type="file"]');
+            const file = this.files[0];
 
-    // img取得
-    const preview =
-        document.getElementById('preview');
+            if (!file) return;
 
-    // ファイル選択時
-    fileInput.addEventListener('change', function (event)
-    {
-        // 選択ファイル取得
-        const file = event.target.files[0];
+            document.getElementById("fileName").textContent =
+                file.name;
 
-        // ファイル存在時
-        if (file)
-        {
-            // 一時URL生成
-            const imageUrl =
-                URL.createObjectURL(file);
+            const reader = new FileReader();
 
-            // imgへ設定
-            preview.src = imageUrl;
+            reader.onload = function (e) {
 
-            // 表示
-            preview.style.display = 'block';
-        }
-    });
+                const preview =
+                    document.getElementById("preview");
 
+                preview.src = e.target.result;
+                preview.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        });
 </script>
-
-
-<a href="/Posts">一覧</a>
