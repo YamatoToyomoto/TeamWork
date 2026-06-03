@@ -16,5 +16,15 @@ namespace WebApp.Data
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId);
+        }
     }
 }

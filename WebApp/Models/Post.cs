@@ -30,5 +30,7 @@ namespace WebApp.Models
 
         [Column("user_id")]
         public int UserId { get; set; }
+
+        public User? User { get; set; }
     }
 }
