@@ -1,98 +1,122 @@
 ﻿@model WebApp.ViewModels.PostDetailsViewModel
+<p>@Model.Post.ImagePath</p>
+
+<div class="detail-card">
+
+    <h1 class="place-title">
+        @Model.Post.PlaceName
+    </h1>
+
+    <div class="post-meta">
+        <span>📍 @Model.Post.LocationText</span>
+        <span>
+            投稿日：
+            @Model.Post.CreatedAt.ToLocalTime().ToString("yyyy年M月d日")
+        </span>
+    </div>
+
+    <hr>
+
+    <div class="detail-image-area">
+    <img src="@Url.Content(Model.Post.ImagePath)"
+         class="detail-post-image"
+         alt="投稿画像">
+    </div>
 
 
-<h1>投稿詳細</h1>
-
-<h2>@Model.Post.PlaceName</h2>
-
-<p id="locationText">@Model.Post.LocationText</p>
-
-<button type="button" id="translateButton">
-    翻訳
-</button>
-
-<div id="translatedResult" style="margin-top:10px; color: #2b6cb0;">
 </div>
 
-<img src="@Url.Content(Model.Post.ImagePath)"
-     width="300" />
+<button type="button"
+        id="translateButton"
+        class="translate-btn">
+    🌐 翻訳
+</button>
+<div id="translatedResult"></div>
 
-<p>
-    @(Model.Post.CreatedAt
-        .ToLocalTime()
-        .ToString("yyyy/MM/dd"))
-</p>
+    <div class="description" id="locationText">
+        @Model.Post.LocationText
+    </div>
+    <hr />
 
-<hr />
+    <div class="comment-section">
 
-@*コメント追加*@
-<h2>コメント追加</h2>
-<form asp-action="AddComment" method="post">
-    <input type="hidden"
-           name="postId"
-           value="@Model.Post.Id" />
+        <h2>コメント追加</h2>
 
-    <textarea name="commentText"
-              rows="4"
-              cols="50"
-              required></textarea>
-
-    <br/>
-
-
-    <button type="submit">コメント追加</button>
-
-</form>
-
-<h3>コメント一覧</h3>
-
-@foreach (var comment in Model.Comments)
-{
-    <div>
-        <p>@comment.CommentText</p>
-
-        <small>
-            @(comment.CreatedAt
-        .ToLocalTime()
-        .ToString("yyyy/MM/dd"))
-        </small>
-
-
-        @* コメント削除 *@
-        <form asp-action="DeleteComment" method="post">
-
-            <input type="hidden"
-                   name="id"
-                   value="@comment.Id" />
+        <form asp-action="AddComment" method="post">
 
             <input type="hidden"
                    name="postId"
                    value="@Model.Post.Id" />
 
-            <button type="submit">削除</button>
-            
+            <textarea name="commentText"
+                      rows="4"
+                      required></textarea>
+
+            <br />
+
+            <button type="submit"
+                    class="btn-custom btn-edit">
+                コメント追加
+            </button>
+
         </form>
+
+        <h3>コメント一覧</h3>
+
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="comment-box">
+
+                <p>@comment.CommentText</p>
+
+                <small>
+                    @(comment.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd"))
+                </small>
+
+                <form asp-action="DeleteComment"
+                      method="post">
+
+                    <input type="hidden"
+                           name="id"
+                           value="@comment.Id" />
+
+                    <input type="hidden"
+                           name="postId"
+                           value="@Model.Post.Id" />
+
+                    <button type="submit"
+                            class="btn-custom btn-delete"
+                            onclick="return confirm('コメントを削除しますか？');">
+                        削除
+                    </button>
+
+                </form>
+
+            </div>
+        }
+
     </div>
 
-    <hr />
-}
+    <div class="button-area">
 
-<!-- 編集画面へ -->
-<a asp-action="Edit"
-   asp-route-id="@Model.Post.Id">
-    編集
-</a>
+        <a asp-action="Edit"
+           asp-route-id="@Model.Post.Id"
+           class="btn-custom btn-edit">
+            編集
+        </a>
 
-<!-- 削除 -->
-<a asp-action="Delete"
-   asp-route-id="@Model.Post.Id"
-   onclick="return confirm('本当に削除しますか？')">
-    削除
-</a>
+        <a asp-action="Delete"
+           asp-route-id="@Model.Post.Id"
+           class="btn-custom btn-delete"
+           onclick="return confirm('本当に削除しますか？');">
+            削除
+        </a>
 
-<a asp-action="Index">
-    一覧へ戻る
-</a>
+        <a asp-action="Index"
+           class="btn-custom btn-back">
+            一覧へ戻る
+        </a>
+</div>
 
 @section Scripts {
     <script>

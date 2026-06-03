@@ -346,7 +346,7 @@ body {
         font-size: 20px;
     }
 
-    .image-area {
+    .site-image-area {
         height: 500px;
     }
 }
@@ -370,7 +370,7 @@ body {
         width: 100%;
     }
 
-    .image-area {
+    .site-image-area {
         height: 380px;
     }
 }
