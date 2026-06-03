@@ -15,8 +15,6 @@ namespace WebApp.Models
         public int Id { get; set; }
 
         [Column("place_name")]
-        
-
         public string PlaceName { get; set; } = string.Empty;
 
         [Column("location_text")]
@@ -30,6 +28,11 @@ namespace WebApp.Models
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         public List<Comment>? Comments { get; set; }
+
+        [Column("user_id")]
+        public int UserId { get; set; }
+
+        public User? User { get; set; }
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }

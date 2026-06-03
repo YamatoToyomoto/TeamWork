@@ -27,7 +27,9 @@ namespace WebApp.Controllers
         public IActionResult Index()
         {
             //DBのPostsテーブルから全件取得
-            var post = _db.Posts.ToList();
+            var post = _db.Posts
+                .Include(p => p.User)
+                .ToList();
 
             return View(post);
         }
@@ -37,6 +39,13 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account" ,
+                    new { returnUrl = Request.Path });
+            }
 
             return View();
         }
@@ -45,8 +54,15 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult Create(Post post, IFormFile imageFile)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             //入力チェック    
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(post);
             }
@@ -77,6 +93,7 @@ namespace WebApp.Controllers
             //投稿日時を現在時刻に設定
             post.CreatedAt = DateTime.UtcNow;
 
+            post.UserId = userId.Value;
 
             //テーブルに追加
             _db.Posts.Add(post);
@@ -93,7 +110,8 @@ namespace WebApp.Controllers
         {
 
             var post = _db.Posts
-               .FirstOrDefault(p => p.Id == id);
+                .Include(p => p.User)
+                .FirstOrDefault(p => p.Id == id);
 
             if (post == null)
             {
@@ -120,13 +138,21 @@ namespace WebApp.Controllers
         public IActionResult Delete(int id)
         {
             var post = _db.Posts.Find(id);
+
             if (post == null)
             {
                 return NotFound();
             }
 
+            var loginUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (loginUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             //画像パスがある場合
-            if(!string.IsNullOrEmpty(post.ImagePath))
+            if (!string.IsNullOrEmpty(post.ImagePath))
             {
                 //wwwrootからの物理パス生成
                 string imagePath = Path.Combine(
@@ -159,6 +185,18 @@ namespace WebApp.Controllers
             if (post == null)
             {
                 return NotFound();
+            }
+
+            var loginUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (loginUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (post.UserId != loginUserId.Value)
+            {
+                return Unauthorized();
             }
 
             return View(post);
