@@ -8,12 +8,12 @@
             <div class="logo-icon">🗑</div>
 
             <div class="logo-text">
-                <h1>ゴミ箱アプリ</h1>
-                <p>新規投稿</p>
+                <h1 data-i18n="app_title">ゴミ箱アプリ</h1>
+                <p data-i18n="new_post">新規投稿</p>
             </div>
         </div>
 
-        <a asp-action="Index" class="back-link">
+        <a asp-action="Index" class="back-link" data-i18n="back_to_list">
             ← 一覧に戻る
         </a>
 
@@ -21,11 +21,11 @@
 
     <div class="form-area">
 
-        <h2 class="page-title">
+        <h2 class="page-title" data-i18n="post_form_title">
             ゴミ箱情報を投稿
         </h2>
 
-        <p class="page-subtitle">
+        <p class="page-subtitle" data-i18n="post_form_subtitle">
             ゴミ箱の位置情報を共有してください
         </p>
 
@@ -37,13 +37,13 @@
 
             <div class="form-group">
                 <label asp-for="PlaceName" class="form-label">
-                    場所
+                    <span data-i18n="place">場所</span>
                     <span class="required">*</span>
                 </label>
 
                 <input asp-for="PlaceName"
                        class="form-control"
-                       placeholder="例：札幌駅南口" />
+                       data-i18n-placeholder="place_placeholder" />
 
                 <span asp-validation-for="PlaceName"
                       class="text-danger"></span>
@@ -53,13 +53,13 @@
 
             <div class="form-group">
                 <label asp-for="LocationText" class="form-label">
-                    場所説明
+                    <span data-i18n="description">場所説明</span>
                     <span class="required">*</span>
                 </label>
 
                 <textarea asp-for="LocationText"
                           class="form-control"
-                          placeholder="場所の説明を入力してください">
+                          data-i18n-placeholder="location_placeholder">
                 </textarea>
 
                 <span asp-validation-for="LocationText"
@@ -70,7 +70,7 @@
 
             <div class="form-group">
 
-                <label for="imageFile" class="form-label">
+                <label for="imageFile" class="form-label" data-i18n="upload_photo">
                     写真をアップロード
                 </label>
 
@@ -87,11 +87,11 @@
                         📷
                     </div>
 
-                    <div class="upload-text">
+                    <div class="upload-text" data-i18n="click_select">
                         クリックして写真を選択
                     </div>
 
-                    <div class="upload-subtext" id="fileName">
+                    <div class="upload-subtext" data-i18n="file_support" id="fileName">
                         JPG・PNG対応
                     </div>
 
@@ -106,7 +106,7 @@
 
             </div>
 
-            <button type="submit" class="submit-btn">
+            <button type="submit" class="submit-btn" data-i18n="submit_post">
                 投稿する
             </button>
 

@@ -23,7 +23,9 @@ namespace WebApp.Controllers
         public IActionResult Index()
         {
             //DBのPostsテーブルから全件取得
-            var post = _db.Posts.ToList();
+            var post = _db.Posts
+                .Include(p => p.User)
+                .ToList();
 
             return View(post);
         }
@@ -104,7 +106,8 @@ namespace WebApp.Controllers
         {
 
             var post = _db.Posts
-               .FirstOrDefault(p => p.Id == id);
+                .Include(p => p.User)
+                .FirstOrDefault(p => p.Id == id);
 
             if (post == null)
             {

@@ -14,15 +14,16 @@
         </div>
 
         <div>
-            <h1>ゴミ箱アプリ</h1>
-            <p>投稿一覧</p>
+            <h1 data-i18n="trash_app_title">ゴミ箱アプリ</h1>
+            <p data-i18n="post_list">投稿一覧</p>
         </div>
 
     </div>
 
     <a asp-controller="Posts"
        asp-action="Create"
-       class="post-create-btn">
+       class="post-create-btn"
+       data-i18n="new_post">
 
         ＋ 新規投稿
 
@@ -47,19 +48,29 @@
                     @post.LocationText
                 </p>
 
+                <p class="post-author">
+                    <span data-i18n="author">投稿者</span>
+                    :@post.User?.UserName
+
+                </p>
+
                 <p class="post-date">
                     @(post.CreatedAt
                         .ToLocalTime()
                         .ToString("yyyy/MM/dd"))
+
                 </p>
 
                 <a asp-action="Details"
                    asp-route-id="@post.Id"
-                   class="post-detail-btn">
+                   class="post-detail-btn"
+                   data-i18n="detail">
 
                     詳細を見る
 
                 </a>
+
+
 
             </div>
 

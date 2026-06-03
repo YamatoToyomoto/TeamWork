@@ -20,5 +20,7 @@ namespace WebApp.Models
 
         [Column("role")]
         public string Role { get; set; } = string.Empty;
+
+        public List<Post>? Posts { get; set; }
     }
 }
