@@ -1,24 +1,69 @@
 ﻿@model List<WebApp.Models.Post>
 
-<h1>投稿一覧</h1>
-<a href="/Posts/Create">投稿</a>
-
-@foreach (var post in Model)
-{
-    <div>
-        <h2>@post.PlaceName</h2>
-
-        <p>@post.LocationText</p>
-
-        <img src="@post.ImagePath" width="200" />
-
-        <p>@(post.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd"))</p>
-
-
-        <a asp-controller="Posts"
-           asp-action="Details"
-           asp-route-id="@post.Id">
-            詳細
-        </a>
-    </div>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/index.css" />
 }
+
+<div class="post-header">
+
+    <div class="post-title">
+
+        <div class="post-title-icon">
+            🗑
+        </div>
+
+        <div>
+            <h1>ゴミ箱アプリ</h1>
+            <p>投稿一覧</p>
+        </div>
+
+    </div>
+
+    <a asp-controller="Posts"
+       asp-action="Create"
+       class="post-create-btn">
+
+        ＋ 新規投稿
+
+    </a>
+
+</div>
+
+<div class="post-list">
+
+    @foreach (var post in Model)
+    {
+        <div class="post-card">
+
+            <img src="@post.ImagePath"
+                 class="post-card-image" />
+
+            <div class="post-card-body">
+
+                <h2>📍 @post.PlaceName</h2>
+
+                <p class="post-description">
+                    @post.LocationText
+                </p>
+
+                <p class="post-date">
+                    @(post.CreatedAt
+                        .ToLocalTime()
+                        .ToString("yyyy/MM/dd"))
+                </p>
+
+                <a asp-action="Details"
+                   asp-route-id="@post.Id"
+                   class="post-detail-btn">
+
+                    詳細を見る
+
+                </a>
+
+            </div>
+
+        </div>
+    }
+
+</div>

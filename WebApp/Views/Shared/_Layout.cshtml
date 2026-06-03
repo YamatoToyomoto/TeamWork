@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/post.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Detail.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -42,7 +43,7 @@
         </nav>
     </header>
     @* <div class="container"> *@
-    <main class="desktop-hero">
+    <main class="main-content">
             @RenderBody()
         </main>
     @* </div> *@
