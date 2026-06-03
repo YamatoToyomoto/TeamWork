@@ -16,6 +16,9 @@
     <header>
         @* <main>@RenderBody()</main> *@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-success border-bottom box-shadow mb-3">
+            @{
+                var userName = Context.Session.GetString("UserName");
+            }
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApp</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,11 +36,38 @@
                         </li>
                     </ul>
 
-                    <select id="languageSelect" class="form-select w-auto">
-                        <option value="ja">日本語</option>
-                        <option value="en">English</option>
-                        <option value="vi">Tiếng Việt</option>
-                    </select>
+                    <div class="d-flex align-items-center gap-3">
+
+                        @if (userName == null)
+                        {
+                            <span class="text-white">👤 Guest</span>
+
+                            <a asp-controller="Account"
+                               asp-action="Login"
+                               class="btn btn-light btn-sm">
+                                ログイン
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-white">
+                                👤 @userName
+                            </span>
+
+                            <a asp-controller="Account"
+                               asp-action="Logout"
+                               class="btn btn-outline-light btn-sm">
+                                ログアウト
+                            </a>
+                        }
+
+                        <select id="languageSelect" class="form-select w-auto">
+                            <option value="ja">日本語</option>
+                            <option value="en">English</option>
+                            <option value="vi">Tiếng Việt</option>
+                        </select>
+
+                    </div>
                 </div>
             </div>
         </nav>

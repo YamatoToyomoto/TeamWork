@@ -33,6 +33,13 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account" ,
+                    new { returnUrl = Request.Path });
+            }
 
             return View();
         }
@@ -41,8 +48,15 @@ namespace WebApp.Controllers
         [HttpPost]
         public IActionResult Create(Post post, IFormFile imageFile)
         {
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             //入力チェック    
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(post);
             }
@@ -73,6 +87,7 @@ namespace WebApp.Controllers
             //投稿日時を現在時刻に設定
             post.CreatedAt = DateTime.UtcNow;
 
+            post.UserId = userId.Value;
 
             //テーブルに追加
             _db.Posts.Add(post);
@@ -116,13 +131,21 @@ namespace WebApp.Controllers
         public IActionResult Delete(int id)
         {
             var post = _db.Posts.Find(id);
+
             if (post == null)
             {
                 return NotFound();
             }
 
+            var loginUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (loginUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             //画像パスがある場合
-            if(!string.IsNullOrEmpty(post.ImagePath))
+            if (!string.IsNullOrEmpty(post.ImagePath))
             {
                 //wwwrootからの物理パス生成
                 string imagePath = Path.Combine(
@@ -157,25 +180,62 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            var loginUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (loginUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (post.UserId != loginUserId.Value)
+            {
+                return Unauthorized();
+            }
+
             return View(post);
         }
 
+        [HttpPost]
         public IActionResult Edit(Post post)
         {
             if (!ModelState.IsValid)
             {
                 return View(post);
             }
-            //投稿日時を現在時刻に設定
-            post.CreatedAt = DateTime.UtcNow;
 
-            //DB更新
-            _db.Posts.Update(post);
+            // DBから取得
+            var dbPost = _db.Posts.Find(post.Id);
 
-            //DB保存
+            if (dbPost == null)
+            {
+                return NotFound();
+            }
+
+            // ログイン確認
+            var loginUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (loginUserId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // 投稿者本人か確認
+            if (dbPost.UserId != loginUserId.Value)
+            {
+                return Unauthorized();
+            }
+
+            // 編集可能項目だけ更新
+            dbPost.PlaceName = post.PlaceName;
+            dbPost.LocationText = post.LocationText;
+
+
+            // 必要なら画像も
+            dbPost.ImagePath = post.ImagePath;
+
             _db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = dbPost.Id });
         }
 
 
