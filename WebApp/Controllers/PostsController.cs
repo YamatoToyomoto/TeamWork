@@ -6,6 +6,7 @@ using WebApp.Models;
 using WebApp.ViewModels;
 using Microsoft.AspNetCore.Http;
 
+
 namespace WebApp.Controllers
 {
     public class PostsController : Controller
@@ -13,10 +14,13 @@ namespace WebApp.Controllers
         //DB操作を行うための変数
         private readonly ApplicationDbContext _db;
 
+        private readonly IWebHostEnvironment _environment;
+
         //ApplicationDbContext を受け取る
-        public PostsController(ApplicationDbContext db)
+        public PostsController(ApplicationDbContext db, IWebHostEnvironment environment)
         {
             _db = db;
+            _environment = environment;
         }
 
         //投稿一覧画面を表示
@@ -160,22 +164,80 @@ namespace WebApp.Controllers
             return View(post);
         }
 
+        [HttpPost]
         public IActionResult Edit(Post post)
         {
             if (!ModelState.IsValid)
             {
                 return View(post);
             }
-            //投稿日時を現在時刻に設定
-            post.CreatedAt = DateTime.UtcNow;
 
-            //DB更新
-            _db.Posts.Update(post);
+            if (post.DeleteImage && post.ImageFile == null)
+            {
+                ModelState.AddModelError(
+                    "ImageFile",
+                    "画像を削除する場合は新しい画像を選択してください"
+                );
 
-            //DB保存
+                return View(post);
+            }
+
+            var target = _db.Posts.Find(post.Id);
+
+            if (target == null)
+            {
+                return NotFound();
+            }
+
+            // テキスト更新
+            target.PlaceName = post.PlaceName;
+            target.LocationText = post.LocationText;
+
+            // 画像削除
+            if (post.DeleteImage)
+            {
+                if (!string.IsNullOrEmpty(target.ImagePath))
+                {
+                    string oldPath = Path.Combine(
+                        _environment.WebRootPath,
+                        target.ImagePath.TrimStart('/'));
+
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
+
+                target.ImagePath = "";
+            }
+
+            // 新しい画像
+            if (post.ImageFile != null)
+            {
+                string fileName =
+                    Guid.NewGuid().ToString()
+                    + Path.GetExtension(post.ImageFile.FileName);
+
+                string savePath = Path.Combine(
+                    _environment.WebRootPath,
+                    "images",
+                    fileName);
+
+                using (var stream =
+                    new FileStream(savePath, FileMode.Create))
+                {
+                    post.ImageFile.CopyTo(stream);
+                }
+
+                target.ImagePath =
+                    "/images/" + fileName;
+            }
+
             _db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction(
+                "Details",
+                new { id = target.Id });
         }
 
 

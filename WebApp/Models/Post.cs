@@ -4,6 +4,7 @@ namespace WebApp.Models
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.AspNetCore.Http;
 
     [Table("posts")]
 
@@ -29,5 +30,11 @@ namespace WebApp.Models
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
         public List<Comment>? Comments { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
+
+        [NotMapped]
+        public bool DeleteImage { get; set; }
     }
 }
