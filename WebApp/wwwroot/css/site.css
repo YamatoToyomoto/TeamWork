@@ -386,3 +386,46 @@ body {
     background: white;
     border-top: 1px solid #d1d5db;
 }
+
+/* =========================
+   PRIVACY
+========================= */
+
+.privacy-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+    .privacy-container h1 {
+        color: #14532d;
+        margin-bottom: 10px;
+    }
+
+.policy-date {
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+.policy-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.05);
+}
+
+    .policy-card h2 {
+        color: #16a34a;
+        margin-bottom: 15px;
+    }
+
+    .policy-card p,
+    .policy-card li {
+        line-height: 1.8;
+        color: #334155;
+    }
+
+    .policy-card ul {
+        margin-left: 20px;
+    }
