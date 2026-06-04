@@ -50,6 +50,9 @@ const translations = {
         trash_app_title: "ゴミ箱アプリ",
         post_list: "投稿一覧",
         new_post: "＋ 新規投稿",
+        search_placeholder: "場所や説明で検索...",
+        search_button: "検索",
+        clear_button: "クリア",
 
 
         // ---- 投稿画面 ----
@@ -199,6 +202,9 @@ const translations = {
         trash_app_title: "Trash App",
         post_list: "Posts",
         new_post: "+ New Post",
+        search_placeholder: "Search by place or description...",
+        search_button: "Search",
+        clear_button: "Clear",
 
 
         // ---- 投稿画面 ----
@@ -352,6 +358,9 @@ const translations = {
         trash_app_title: "Ứng dụng rác",
         post_list: "Danh sách bài đăng",
         new_post: "+ Bài viết mới",
+        search_placeholder: "Tìm kiếm theo địa điểm hoặc mô tả...",
+        search_button: "Tìm kiếm",
+        clear_button: "Xóa",
 
 
         // ---- 投稿画面 ----

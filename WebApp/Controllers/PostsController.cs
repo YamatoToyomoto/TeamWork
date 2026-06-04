@@ -24,14 +24,25 @@ namespace WebApp.Controllers
         }
 
         //投稿一覧画面を表示
-        public IActionResult Index()
+        public IActionResult Index(string? searchString)
         {
-            //DBのPostsテーブルから全件取得
-            var post = _db.Posts
+            // DBのPostsテーブルから取得
+            var postsQuery = _db.Posts
                 .Include(p => p.User)
-                .ToList();
+                .AsQueryable();
 
-            return View(post);
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                postsQuery = postsQuery.Where(p => 
+                    p.PlaceName.Contains(searchString) || 
+                    p.LocationText.Contains(searchString));
+            }
+
+            var posts = postsQuery.ToList();
+
+            ViewData["CurrentFilter"] = searchString;
+
+            return View(posts);
         }
 
 

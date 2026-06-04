@@ -152,19 +152,22 @@
         </div>
     </footer>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script>
 
         document.addEventListener("DOMContentLoaded", () => {
 
             const languageSelect =
-            document.getElementById("languageSelect");
+                document.getElementById("languageSelect");
 
             // 保存済み言語取得
             const savedLanguage =
-            localStorage.getItem("language");
+                localStorage.getItem("language");
 
-            if (savedLanguage)
-            {
+            if (savedLanguage) {
                 languageSelect.value = savedLanguage;
             }
 
@@ -181,7 +184,7 @@
 
                 console.log(
                     "現在の言語:",
-                languageSelect.value
+                    languageSelect.value
                 );
 
                 applyTranslations();
@@ -194,24 +197,18 @@
 
         window.addEventListener("scroll", function () {
 
-        const navbar =
-        document.querySelector(".navbar");
+            const navbar =
+                document.querySelector(".navbar");
 
-        if (window.scrollY > 50)
-        {
-        navbar.classList.add("navbar-small");
-        }
-        else
-        {
-        navbar.classList.remove("navbar-small");
-        }
+            if (window.scrollY > 50) {
+                navbar.classList.add("navbar-small");
+            }
+            else {
+                navbar.classList.remove("navbar-small");
+            }
         });
 
     </script>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

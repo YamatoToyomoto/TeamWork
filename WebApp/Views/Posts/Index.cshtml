@@ -9,7 +9,21 @@
         <div class="hero-content">
             <div class="hero-badge" data-i18n="trash_app_title">ゴミ箱アプリ</div>
             <h1 class="hero-title" data-i18n="post_list"></h1>
-            <a asp-controller="Posts" asp-action="Create" class="hero-cta-btn">
+            
+            <form asp-action="Index" method="get" class="search-form mt-4">
+                <div class="input-group">
+                    <input type="text" name="searchString" class="form-control search-input" 
+                           placeholder="場所や説明で検索..." data-i18n-placeholder="search_placeholder"
+                           value="@ViewData["CurrentFilter"]" />
+                    <button class="btn btn-primary" type="submit" data-i18n="search_button">検索</button>
+                    @if (!string.IsNullOrEmpty(ViewData["CurrentFilter"] as string))
+                    {
+                        <a asp-action="Index" class="btn btn-outline-secondary" data-i18n="clear_button">クリア</a>
+                    }
+                </div>
+            </form>
+
+            <a asp-controller="Posts" asp-action="Create" class="hero-cta-btn mt-4">
                 <span class="btn-icon">＋</span>
                 <span data-i18n="new_post">新規投稿する</span>
             </a>
