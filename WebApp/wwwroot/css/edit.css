@@ -1,17 +1,15 @@
-﻿bo.edit-container {
+﻿.edit-container {
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     padding: 40px 20px;
 }
 
 .edit-card {
     width: 100%;
     max-width: 800px;
-    background: white;
-    padding: 40px;
-    border-radius: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    margin: 0 auto;
 }
 
     .edit-card h1 {
