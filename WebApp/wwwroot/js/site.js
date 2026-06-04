@@ -1,4 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
@@ -76,7 +76,6 @@ const translations = {
         back_to_list: "一覧へ戻る",
 
 
-
         // ---- プライバシー ----
         privacy_title: "📄 利用規約・プライバシーポリシー",
         policy_date: "制定日：2026年6月3日",
@@ -122,6 +121,36 @@ const translations = {
 
         section9_title: "9. お問い合わせ",
         section9_text: "本アプリに関するお問い合わせは、ゴミ箱アプリ開発チームまでお願いいたします。",
+
+
+        // ---- ログイン ----
+        login_title: "🔑 ログイン",
+        login_subtitle: "ごみ箱情報共有サービスへようこそ",
+        email: "メールアドレス",
+        password: "パスワード",
+        login: "ログイン",
+        no_account: "アカウントをお持ちでない方",
+        register_here: "新規登録はこちら",
+
+        register_title: "📝 新規登録",
+        register_subtitle: "アカウントを作成して投稿を始めましょう",
+        username: "ユーザー名",
+        register: "登録する",
+        already_account: "すでにアカウントをお持ちですか？",
+        login_here: "ログインはこちら",
+
+
+        // ---- 使い方画面 ----
+        usage_title: "📖 使い方ガイド",
+        usage_subtitle: "Trash Spotを上手に活用して、街をきれいにしましょう",
+        step1_title: "1. ゴミ箱を見つける",
+        step1_text: "街中や観光地でゴミ箱を見つけたら、その場所をチェックしましょう。",
+        step2_title: "2. 情報を投稿する",
+        step2_text: "場所、写真、説明を入力して投稿します。みんなが分かりやすいように詳しく書くのがコツです。",
+        step3_title: "3. みんなの投稿を見る",
+        step3_text: "他の人が投稿したゴミ箱情報を確認できます。コメントで情報を補足することも可能です。",
+        usage_footer: "みんなで協力して、ポイ捨てのない綺麗な街を作りましょう！",
+        back_to_home: "ホームに戻る",
 
     },
 
@@ -241,6 +270,36 @@ const translations = {
 
         section9_title: "9. Contact",
         section9_text: "For inquiries regarding this application, please contact the Trash App Development Team.",
+
+
+        // ---- ログイン ----
+        login_title: "🔑 Login",
+        login_subtitle: "Welcome to the Trash Bin Sharing Service",
+        email: "Email Address",
+        password: "Password",
+        login: "Login",
+        no_account: "Don't have an account?",
+        register_here: "Register Here",
+
+        register_title: "📝 Register",
+        register_subtitle: "Create an account and start posting",
+        username: "Username",
+        register: "Register",
+        already_account: "Already have an account?",
+        login_here: "Login Here",
+
+
+        // ---- How to Use ----
+        usage_title: "📖 User Guide",
+        usage_subtitle: "Let's use Trash Spot to keep our city clean",
+        step1_title: "1. Find a Trash Bin",
+        step1_text: "When you find a trash bin in the city or at a tourist spot, check its location.",
+        step2_title: "2. Post Information",
+        step2_text: "Enter the location, photo, and description to post. Detailed descriptions help everyone find it easily.",
+        step3_title: "3. View Others' Posts",
+        step3_text: "Check trash bin information posted by others. You can also add more details in the comments.",
+        usage_footer: "Let's work together to create a beautiful city without littering!",
+        back_to_home: "Back to Home",
 
     },
 
@@ -365,6 +424,36 @@ const translations = {
         section9_title: "9. Liên hệ",
         section9_text: "Nếu có thắc mắc liên quan đến ứng dụng này, vui lòng liên hệ với Nhóm phát triển Ứng dụng Thùng rác.",
 
+
+        // ---- ログイン ----
+        login_title: "🔑 Đăng nhập",
+        login_subtitle: "Chào mừng đến với dịch vụ chia sẻ thông tin thùng rác",
+        email: "Địa chỉ Email",
+        password: "Mật khẩu",
+        login: "Đăng nhập",
+        no_account: "Chưa có tài khoản?",
+        register_here: "Đăng ký tại đây",
+
+        register_title: "📝 Đăng ký",
+        register_subtitle: "Tạo tài khoản và bắt đầu đăng bài",
+        username: "Tên người dùng",
+
+        register: "Đăng ký",
+        already_account: "Đã có tài khoản?",
+        login_here: "Đăng nhập tại đây",
+
+
+        // ---- Cách sử dụng ----
+        usage_title: "📖 Hướng dẫn sử dụng",
+        usage_subtitle: "Hãy sử dụng Trash Spot hiệu quả để giữ gìn thành phố sạch đẹp",
+        step1_title: "1. Tìm thùng rác",
+        step1_text: "Khi bạn tìm thấy thùng rác trong thành phố hoặc khu du lịch, hãy kiểm tra vị trí của nó.",
+        step2_title: "2. Đăng thông tin",
+        step2_text: "Nhập địa điểm, ảnh và mô tả để đăng bài. Mô tả chi tiết sẽ giúp mọi người dễ dàng tìm thấy hơn.",
+        step3_title: "3. Xem bài đăng của mọi người",
+        step3_text: "Bạn có thể kiểm tra thông tin thùng rác do người khác đăng. Bạn cũng có thể bổ sung thông tin qua bình luận.",
+        usage_footer: "Hãy cùng nhau hợp tác để xây dựng một thành phố sạch đẹp không có rác thải!",
+        back_to_home: "Quay lại trang chủ",
     },
 
     

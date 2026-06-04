@@ -80,29 +80,38 @@
                        accept=".jpg,.jpeg,.png"
                        hidden>
 
-                <div class="upload-area"
+                <div class="upload-area" id="uploadArea"
                      onclick="document.getElementById('imageFile').click()">
 
-                    <div class="upload-icon">
-                        📷
+                    <div id="uploadPlaceholder">
+                        <div class="upload-icon">
+                            📷
+                        </div>
+
+                        <div class="upload-text" data-i18n="click_select">
+                            クリックして写真を選択
+                        </div>
+
+                        <div class="upload-subtext" data-i18n="file_support" id="fileName">
+                            JPG・PNG対応
+                        </div>
                     </div>
 
-                    <div class="upload-text" data-i18n="click_select">
-                        クリックして写真を選択
-                    </div>
-
-                    <div class="upload-subtext" data-i18n="file_support" id="fileName">
-                        JPG・PNG対応
+                    <div id="previewContainer" style="display:none; position:relative; width:100%;">
+                        <img id="preview"
+                             style="
+                                display:block;
+                                width:100%;
+                                max-height:400px;
+                                object-fit:contain;
+                                border-radius:12px;
+                                margin: 0 auto;" />
+                        <button type="button" id="removeImage" class="remove-image-btn">
+                            &times;
+                        </button>
                     </div>
 
                 </div>
-
-                <img id="preview"
-                     style="
-                display:none;
-                max-width:300px;
-                margin-top:15px;
-                border-radius:12px;" />
 
             </div>
 
@@ -117,27 +126,41 @@
 </div>
 
 <script>
-    document.getElementById("imageFile")
-        .addEventListener("change", function () {
+    const imageFile = document.getElementById("imageFile");
+    const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+    const previewContainer = document.getElementById("previewContainer");
+    const preview = document.getElementById("preview");
+    const fileName = document.getElementById("fileName");
+    const removeImage = document.getElementById("removeImage");
+    const uploadArea = document.getElementById("uploadArea");
 
-            const file = this.files[0];
+    imageFile.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
 
-            if (!file) return;
+        fileName.textContent = file.name;
 
-            document.getElementById("fileName").textContent =
-                file.name;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            uploadPlaceholder.style.display = "none";
+            previewContainer.style.display = "block";
+            uploadArea.style.padding = "0";
+        };
+        reader.readAsDataURL(file);
+    });
 
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-
-                const preview =
-                    document.getElementById("preview");
-
-                preview.src = e.target.result;
-                preview.style.display = "block";
-            };
-
-            reader.readAsDataURL(file);
-        });
+    removeImage.addEventListener("click", function (e) {
+        e.stopPropagation();
+        imageFile.value = "";
+        preview.src = "";
+        uploadPlaceholder.style.display = "flex";
+        previewContainer.style.display = "none";
+        uploadArea.style.padding = "";
+        
+        // Reset fileName text using the existing translation function
+        if (typeof applyTranslations === "function") {
+            applyTranslations();
+        }
+    });
 </script>

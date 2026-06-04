@@ -152,6 +152,21 @@ textarea.form-control {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    .upload-area:hover {
+        border-color: #22c55e;
+        background: #f0fdf4;
+    }
+
+#uploadPlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
 .upload-icon {
@@ -178,6 +193,34 @@ textarea.form-control {
     font-size: 13px;
     color: #9ca3af;
 }
+
+.remove-image-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: 2px solid white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    line-height: 1;
+}
+
+    .remove-image-btn:hover {
+        background: #ef4444;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
 
 /* =========================
    BUTTON

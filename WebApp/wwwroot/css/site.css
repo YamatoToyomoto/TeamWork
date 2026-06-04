@@ -506,11 +506,13 @@ body {
 .user-name {
     color: white;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .guest-user {
     color: black;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 /* ログイン */

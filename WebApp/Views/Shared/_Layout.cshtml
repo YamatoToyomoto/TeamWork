@@ -44,7 +44,8 @@
                                && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home"
                                ? "active-link" : "")"
                                asp-controller="Home"
-                               asp-action="Index">
+                               asp-action="Index"
+                               data-i18n="home">
                                 🏠 ホーム
                             </a>
                         </li>
@@ -53,10 +54,22 @@
                                 @(ViewContext.RouteData.Values["Action"]?.ToString() == "Privacy"
                                ? "active-link" : "")"
                                asp-controller="Home"
-                               asp-action="Privacy">
+                               asp-action="Privacy"
+                               data-i18n="privacy">
                                 📄 利用規約
                             </a>
 
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link custom-link
+                                @(ViewContext.RouteData.Values["Action"]?.ToString() == "Usage"
+                               ? "active-link" : "")"
+                               asp-controller="Home"
+                               asp-action="Usage"
+                               data-i18n="howToUse">
+                                📖 使い方
+                            </a>
                         </li>
 
                         <li class="nav-item">
@@ -65,7 +78,8 @@
                                && ViewContext.RouteData.Values["Controller"]?.ToString() == "Posts"
                                ? "active-link" : "")"
                                asp-controller="Posts"
-                               asp-action="Index">
+                               asp-action="Index"
+                               data-i18n="post_list">
                                 📝 投稿一覧
                             </a>
                         </li>
@@ -75,7 +89,8 @@
                                 @(ViewContext.RouteData.Values["Action"]?.ToString() == "Create"
                                ? "active-link" : "")"
                                asp-controller="Posts"
-                               asp-action="Create">
+                               asp-action="Create" 
+                               data-i18n="new_post">
                                 ➕ 新規投稿
                             </a>
                         </li>
