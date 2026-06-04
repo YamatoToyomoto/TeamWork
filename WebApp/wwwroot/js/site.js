@@ -383,6 +383,12 @@ function applyTranslations() {
         }
     });
 
+    // 翻訳ボタンのテキストを現在の言語に更新
+    document.querySelectorAll(".translate-btn").forEach(btn => {
+        const isTranslated = btn.dataset.translated === "true";
+        btn.innerText = isTranslated ? dict.translated : dict.translate;
+    });
+
     // ⭐ placeholder翻訳（追加）
     document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
         const key = el.getAttribute("data-i18n-placeholder");

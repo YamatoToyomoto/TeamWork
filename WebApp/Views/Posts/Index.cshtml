@@ -1,103 +1,73 @@
 ﻿@model List<WebApp.Models.Post>
 
 @section Styles {
-    <link rel="stylesheet"
-          href="~/css/index.css" />
+    <link rel="stylesheet" href="~/css/index.css" />
 }
 
-<div class="post-header">
-
-    <div class="post-title">
-
-        <div class="post-title-icon">
-            🗑
+<div class="post-index-wrapper">
+    <header class="post-index-hero">
+        <div class="hero-content">
+            <div class="hero-badge" data-i18n="trash_app_title">ゴミ箱アプリ</div>
+            <h1 class="hero-title" data-i18n="post_list"></h1>
+            <a asp-controller="Posts" asp-action="Create" class="hero-cta-btn">
+                <span class="btn-icon">＋</span>
+                <span data-i18n="new_post">新規投稿する</span>
+            </a>
         </div>
-
-        <div>
-            <h1 data-i18n="trash_app_title">ゴミ箱アプリ</h1>
-            <p data-i18n="post_list">投稿一覧</p>
+        <div class="hero-decoration">
+            <div class="blob-1"></div>
+            <div class="blob-2"></div>
         </div>
+    </header>
 
+    <div class="post-grid-container">
+        @foreach (var post in Model)
+        {
+            <article class="post-card">
+                <div class="post-card-header">
+                    <img src="@post.ImagePath" alt="@post.PlaceName" class="post-card-img" />
+                </div>
+
+                <div class="post-card-body">
+                    <div class="post-title-container">
+                        <h2 class="post-title" data-original="@post.PlaceName">@post.PlaceName</h2>
+                        <button type="button" class="translate-btn" data-translated="false" data-i18n="translate">🌐 翻訳</button>
+                    </div>
+                    <p class="post-excerpt" data-original="@post.LocationText">@post.LocationText</p>
+                    
+                    <div class="post-footer">
+                        <div class="author-info">
+                            <div class="author-avatar">@(post.User?.UserName?.Substring(0, 1).ToUpper() ?? "U")</div>
+                            <div class="author-meta">
+                                <span class="author-name">@post.User?.UserName</span>
+                                <span class="post-date">@(post.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd"))</span>
+                            </div>
+                        </div>
+                        <a asp-action="Details" asp-route-id="@post.Id" class="post-link-btn">
+                            <span data-i18n="detail">詳細</span>
+                            <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        }
     </div>
-
-    <a asp-controller="Posts"
-       asp-action="Create"
-       class="post-create-btn"
-       data-i18n="new_post">
-
-        ＋ 新規投稿
-
-    </a>
-
 </div>
 
-<div class="post-list">
-
-    @foreach (var post in Model)
-    {
-        <div class="post-card">
-
-            <img src="@post.ImagePath"
-                 class="post-card-image" />
-
-            <div class="post-card-body">
-
-                <h2 class="place-name"
-                    data-original="@post.PlaceName">
-                    📍 @post.PlaceName
-                </h2>
-
-                <p class="post-description"
-                   data-original="@post.LocationText">
-                    @post.LocationText
-                </p>
-
-                <button type="button"
-                        class="translate-btn"
-                        data-translated="false">
-                    🌐 翻訳
-                </button>
-
-                <p class="post-author">
-                    <span data-i18n="author">投稿者</span>
-                    :@post.User?.UserName
-                </p>
-
-                <p class="post-date">
-                    @(post.CreatedAt
-                        .ToLocalTime()
-                        .ToString("yyyy/MM/dd"))
-                </p>
-
-                <a asp-action="Details"
-                   asp-route-id="@post.Id"
-                   class="post-detail-btn"
-                   data-i18n="detail">
-                    詳細を見る
-                </a>
-
-            </div>
-
-        </div>
-    }
-
-</div>
 @section Scripts {
-
     <script>
-            document.querySelectorAll(".translate-btn")
-            .forEach(button => {
+                document.querySelectorAll(".translate-btn")
+        .forEach(button => {
 
             button.addEventListener("click", async () => {
 
-                const card =
-                    button.closest(".post-card");
+                const card = button.closest(".post-card");
 
                 const placeElement =
-                    card.querySelector(".place-name");
+                    card.querySelector(".post-title");
 
                 const descriptionElement =
-                    card.querySelector(".post-description");
+                    card.querySelector(".post-excerpt");
 
                 const placeText =
                     placeElement.dataset.original;
@@ -109,31 +79,28 @@
                     localStorage.getItem("language") ?? "en";
 
                 const ui =
-                    translations[language] ?? translations.en;
+                    translations?.[language] ?? {
+                        translate: "🌐 翻訳",
+                        translating: "翻訳中...",
+                        translated: "翻訳済み",
+                        error: "エラー",
+                        unavailable: "利用不可"
+                    };
 
                 const isTranslated =
                     button.dataset.translated === "true";
 
-                // 翻訳済みなら原文へ戻す
+                // 戻す
                 if (isTranslated) {
+                    placeElement.innerText = placeText;
+                    descriptionElement.innerText = descriptionText;
 
-                    placeElement.innerText =
-                        "📍 " + placeText;
-
-                    descriptionElement.innerText =
-                        descriptionText;
-
-                    button.dataset.translated =
-                        "false";
-
-                    button.innerText =
-                        ui.translate;
-
+                    button.dataset.translated = "false";
+                    button.innerText = ui.translate;
                     return;
                 }
 
                 try {
-
                     if (typeof LanguageModel === "undefined") {
                         alert("Prompt APIが使えません");
                         return;
@@ -147,57 +114,52 @@
                         return;
                     }
 
-                    button.innerText =
-                        ui.translating;
+                    button.innerText = ui.translating;
 
                     const session =
                         await LanguageModel.create({
                             outputLanguage: language
                         });
 
-                    const translatedPlace =
-                        await session.prompt(`
-        Translate the following Japanese text into ${language}.
-        Return only the translated text.
+                    // ★ここが重要（命令プロンプト）
+                    const promptPlace = `
+        Translate into ${language}.
+        Return ONLY translated text.
 
+        Text:
         ${placeText}
-        `);
+        `;
+
+                    const promptDescription = `
+        Translate into ${language}.
+        Return ONLY translated text.
+
+        Text:
+        ${descriptionText}
+        `;
+
+                    const translatedPlace =
+                        await session.prompt(promptPlace);
 
                     const translatedDescription =
-                        await session.prompt(`
-        Translate the following Japanese text into ${language}.
-        Return only the translated text.
-
-        ${descriptionText}
-        `);
+                        await session.prompt(promptDescription);
 
                     placeElement.innerText =
-                        "📍 " + translatedPlace;
+                        translatedPlace.trim();
 
                     descriptionElement.innerText =
-                        translatedDescription;
+                        translatedDescription.trim();
 
-                    button.dataset.translated =
-                        "true";
-
-                    button.innerText =
-                        ui.translated;
+                    button.dataset.translated = "true";
+                    button.innerText = ui.translated;
 
                     session.destroy();
 
-                }
-                catch (err) {
-
+                } catch (err) {
                     console.error(err);
-
-                    button.innerText =
-                        ui.error;
+                    button.innerText = ui.error;
                 }
-
             });
-
         });
-
     </script>
-
 }
