@@ -74,6 +74,7 @@ const translations = {
         // ---- 詳細画面 ----
         comments: "コメント",
         comment_list: "コメント一覧",
+        comment_placeholder: "コメントを入力...",
         edit: "編集",
         delete: "削除",
         back_to_list: "一覧へ戻る",
@@ -226,6 +227,7 @@ const translations = {
         // ---- 詳細画面 ----
         comments: "Comments",
         comment_list: "Comment List",
+        comment_placeholder: "Enter a comment...",
         edit: "Edit",
         delete: "Delete",
         back_to_list: "Back to List",
@@ -382,6 +384,7 @@ const translations = {
         // ---- 詳細画面 ----
         comments: "Bình luận",
         comment_list: "Danh sách bình luận",
+        comment_placeholder: "Nhập bình luận...",
         edit: "Chỉnh sửa",
         delete: "Xóa",
         back_to_list: "Quay lại danh sách",
