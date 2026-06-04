@@ -36,6 +36,9 @@ const translations = {
 
 
         // ---- 翻訳中 ----
+        translate: "🌐 翻訳",
+        translated: "✅ 翻訳済",
+        original: "↩ 原文",
         translating: "翻訳中...",
         error: "翻訳に失敗しました",
         unavailable: "AIモデルが利用できません",
@@ -63,6 +66,15 @@ const translations = {
         submit_post: "投稿する",
         place_placeholder: "例：渋谷駅南口",
         location_placeholder: "例：札幌駅の南口にある公園の横です",
+
+
+        // ---- 詳細画面 ----
+        comments: "コメント",
+        comment_list: "コメント一覧",
+        edit: "編集",
+        delete: "削除",
+        back_to_list: "一覧へ戻る",
+
 
 
         // ---- プライバシー ----
@@ -144,6 +156,9 @@ const translations = {
 
 
         // ---- 翻訳中 ----
+        translate: "🌐 Translate",
+        translated: "✅ Translated",
+        original: "↩ Original",
         translating: "Translating...",
         error: "Translation failed",
         unavailable: "AI model is not available",
@@ -171,6 +186,14 @@ const translations = {
         submit_post: "Submit",
         place_placeholder: "e.g. Train station or public area",
         location_placeholder: "e.g. Next to a park, near a subway exit",
+
+
+        // ---- 詳細画面 ----
+        comments: "Comments",
+        comment_list: "Comment List",
+        edit: "Edit",
+        delete: "Delete",
+        back_to_list: "Back to List",
 
 
         // ---- プライバシー ----
@@ -256,6 +279,9 @@ const translations = {
 
 
         // ---- 翻訳中 ----
+        translate: "🌐 Dịch",
+        translated: "✅ Đã dịch",
+        original: "↩ Bản gốc",
         translating: "Đang dịch...",
         error: "Dịch thất bại",
         unavailable: "Không thể sử dụng AI",
@@ -283,6 +309,14 @@ const translations = {
         submit_post: "Đăng bài",
         place_placeholder: "VD: Ga tàu hoặc khu công cộng",
         location_placeholder: "VD: Gần lối ra ga tàu hoặc công viên",
+
+
+        // ---- 詳細画面 ----
+        comments: "Bình luận",
+        comment_list: "Danh sách bình luận",
+        edit: "Chỉnh sửa",
+        delete: "Xóa",
+        back_to_list: "Quay lại danh sách",
 
 
         // ---- プライバシー ----

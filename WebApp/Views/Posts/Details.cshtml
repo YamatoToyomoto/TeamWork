@@ -1,185 +1,381 @@
 ﻿@model WebApp.ViewModels.PostDetailsViewModel
-<p>@Model.Post.ImagePath</p>
+
+@{
+    var currentUserId = Context.Session.GetInt32("UserId");
+    var currentRole = Context.Session.GetString("Role");
+}
 
 <div class="detail-card">
 
-    <h1 class="place-title">
+    <h1 class="place-title"
+        id="placeName"
+        data-original="@Model.Post.PlaceName">
         @Model.Post.PlaceName
     </h1>
 
-    <div class="post-meta">
-        <span>📍 @Model.Post.LocationText</span>
-        <span>
-            投稿日：
-            @Model.Post.CreatedAt.ToLocalTime().ToString("yyyy年M月d日")
-        </span>
+    <div class="post-date">
+        📅
+        @(Model.Post.CreatedAt
+            .ToLocalTime()
+            .ToString("yyyy年M月d日"))
     </div>
-
-    <hr>
 
     <div class="detail-image-area">
-    <img src="@Url.Content(Model.Post.ImagePath)"
-         class="detail-post-image"
-         alt="投稿画像">
+
+        <img src="@Url.Content(Model.Post.ImagePath)"
+             class="detail-post-image"
+             alt="投稿画像">
+
     </div>
 
+    <div class="description-card">
+
+        <div class="description-header">
+            <button type="button"
+                    id="translateButton"
+                    class="translate-btn"
+                    data-translated="false"
+                    data-i18n="translate">
+                🌐 翻訳
+            </button>
+
+        </div>
+
+
+        <div class="description"
+             id="locationText"
+             data-original="@Model.Post.LocationText">
+
+            @Model.Post.LocationText
+
+        </div>
+
+    </div>
+
+</div>
+<hr />
+
+<div class="comment-section">
+
+    <h2 data-i18n="comments">
+        コメント
+    </h2>
+
+    <form asp-action="AddComment" method="post">
+
+        <input type="hidden"
+                name="postId"
+                value="@Model.Post.Id" />
+
+    <div class="comment-input-wrapper">
+
+        <textarea name="commentText" required></textarea>
+
+            <button type="submit" class="comment-submit-btn">
+                🛪
+        </button>
+
+    </div>
+    </form>
+
+    <h3 data-i18n="comment_list">
+        コメント一覧
+    </h3>
+
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="comment-box">
+
+            <div class="comment-header">
+
+                <small>
+                    @(comment.CreatedAt
+                        .ToLocalTime()
+                        .ToString("yyyy/MM/dd"))
+                </small>
+
+                <button type="button"
+                        class="comment-translate-btn"
+                        data-i18n="translate">
+                    🌐 翻訳
+                </button>
+
+            </div>
+
+            <p class="comment-text"
+               data-original="@comment.CommentText">
+                @comment.CommentText
+            </p>
+
+            <form asp-action="DeleteComment"
+                  method="post">
+
+                <input type="hidden"
+                       name="id"
+                       value="@comment.Id" />
+
+                <input type="hidden"
+                       name="postId"
+                       value="@Model.Post.Id" />
+
+                <button type="submit"
+                        class="btn-custom btn-delete"
+                        onclick="return confirm('コメントを削除しますか？');">
+                    削除
+                </button>
+
+            </form>
+
+        </div>
+    }
 
 </div>
 
-<button type="button"
-        id="translateButton"
-        class="translate-btn">
-    🌐 翻訳
-</button>
-<div id="translatedResult"></div>
-
-    <div class="description" id="locationText">
-        @Model.Post.LocationText
-    </div>
-    <hr />
-
-    <div class="comment-section">
-
-        <h2>コメント追加</h2>
-
-        <form asp-action="AddComment" method="post">
-
-            <input type="hidden"
-                   name="postId"
-                   value="@Model.Post.Id" />
-
-            <textarea name="commentText"
-                      rows="4"
-                      required></textarea>
-
-            <br />
-
-            <button type="submit"
-                    class="btn-custom btn-edit">
-                コメント追加
-            </button>
-
-        </form>
-
-        <h3>コメント一覧</h3>
-
-        @foreach (var comment in Model.Comments)
-        {
-            <div class="comment-box">
-
-                <p>@comment.CommentText</p>
-
-                <small>
-                    @(comment.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd"))
-                </small>
-
-                <form asp-action="DeleteComment"
-                      method="post">
-
-                    <input type="hidden"
-                           name="id"
-                           value="@comment.Id" />
-
-                    <input type="hidden"
-                           name="postId"
-                           value="@Model.Post.Id" />
-
-                    <button type="submit"
-                            class="btn-custom btn-delete"
-                            onclick="return confirm('コメントを削除しますか？');">
-                        削除
-                    </button>
-
-                </form>
-
-            </div>
-        }
-
-    </div>
-
+@if (currentUserId == Model.Post.UserId ||
+     currentRole == "Admin")
+{
     <div class="button-area">
 
         <a asp-action="Edit"
            asp-route-id="@Model.Post.Id"
-           class="btn-custom btn-edit">
+           class="btn-custom btn-edit"
+           data-i18n="edit">
             編集
         </a>
 
         <a asp-action="Delete"
            asp-route-id="@Model.Post.Id"
            class="btn-custom btn-delete"
-           onclick="return confirm('本当に削除しますか？');">
+           onclick="return confirm('本当に削除しますか？');"
+           data-i18n="delete">
             削除
         </a>
 
         <a asp-action="Index"
-           class="btn-custom btn-back">
+           class="btn-custom btn-back"
+           data-i18n="back_to_list">
             一覧へ戻る
         </a>
-</div>
+
+    </div>
+}
+else
+{
+    <div class="button-area">
+        <a asp-action="Index"
+           class="btn-custom btn-back"
+           data-i18n="back_to_list">
+            一覧へ戻る
+        </a>
+    </div>
+}
 
 @section Scripts {
+
     <script>
-        // 翻訳ボタン取得
-        const button = document.getElementById("translateButton");
 
-        // 翻訳結果表示エリア取得
-        const resultDiv = document.getElementById("translatedResult");
+        const button =
+            document.getElementById("translateButton");
 
-        // ボタンが押されたときの処理
         button.addEventListener("click", async () => {
 
-            // 翻訳対象テキスト取得
-            const text = document.getElementById("locationText")?.innerText;
+            const placeElement =
+                document.getElementById("placeName");
 
-            // 現在選択されている言語（localStorageから取得）
-            const language = localStorage.getItem("language") ?? "en";
-            const ui = translations[language] ?? translations.en;
+            const descriptionElement =
+                document.getElementById("locationText");
 
-            // テキストがなければ処理終了
-            if (!text) return;
+            const placeText =
+                placeElement.dataset.original;
 
-            // Prompt APIが使えるかチェック
-            if (typeof LanguageModel === "undefined") {
-                alert("Prompt APIが使えません");
+            const descriptionText =
+                descriptionElement.dataset.original;
+
+            const language =
+                localStorage.getItem("language") ?? "en";
+
+            const ui =
+                translations[language] ?? translations.en;
+
+            const isTranslated =
+                button.dataset.translated === "true";
+
+            // 翻訳済みなら元に戻す
+            if (isTranslated) {
+
+                placeElement.innerText =
+                    placeText;
+
+                descriptionElement.innerText =
+                    descriptionText;
+
+                button.dataset.translated =
+                    "false";
+
+                button.innerText =
+                    ui.translate;
+
                 return;
             }
 
-            // モデルが利用可能か確認
             try {
-                const availability = await LanguageModel.availability();
-                if (availability !== "available") {
-                    alert("AIモデルが利用できません");
+
+                if (typeof LanguageModel === "undefined") {
+                    alert("Prompt APIが使えません");
                     return;
                 }
 
-                // 翻訳中メッセージ表示
-                resultDiv.innerText = ui.translating;
+                const availability =
+                    await LanguageModel.availability();
 
-                // AIセッション開始（翻訳モデル起動）
-                const session = await LanguageModel.create({
-                    outputLanguage: language
-                });
+                if (availability !== "available") {
+                    alert(ui.unavailable);
+                    return;
+                }
 
-                // AIに渡すプロンプト（翻訳指示）
-                const prompt = `
-                    Translate the following Japanese text into ${language}.
-                    Return only the translated text.
-                    Text: ${text}`;
+                button.innerText =
+                    ui.translating;
 
-                // AIに翻訳依頼
-                const result = await session.prompt(prompt);
+                const session =
+                    await LanguageModel.create({
+                        outputLanguage: language
+                    });
 
-                // 結果表示
-                resultDiv.innerText = result;
+                // タイトル翻訳
+                const translatedPlace =
+                    await session.prompt(`
+        Translate the following Japanese text into ${language}.
+        Return only the translated text.
 
-                // セッション終了（メモリ解放）
+        ${placeText}
+        `);
+
+                // 説明翻訳
+                const translatedDescription =
+                    await session.prompt(`
+        Translate the following Japanese text into ${language}.
+        Return only the translated text.
+
+        ${descriptionText}
+        `);
+
+                placeElement.innerText =
+                    translatedPlace;
+
+                descriptionElement.innerText =
+                    translatedDescription;
+
+                button.dataset.translated =
+                    "true";
+
+                button.innerText =
+                    ui.translated;
+
                 session.destroy();
 
-            } catch (err) {
-                console.error(err);
-                resultDiv.innerText = ui.error;
             }
+            catch (err) {
+
+                console.error(err);
+
+                button.innerText =
+                    ui.error;
+            }
+
         });
+
+        document.querySelectorAll(".comment-translate-btn")
+        .forEach(button => {
+
+            button.addEventListener("click", async () => {
+
+                const commentBox =
+                    button.closest(".comment-box");
+
+                const commentElement =
+                    commentBox.querySelector(".comment-text");
+
+                const originalText =
+                    commentElement.dataset.original;
+
+                const language =
+                    localStorage.getItem("language") ?? "en";
+
+                const ui =
+                    translations[language] ?? translations.en;
+
+                const isTranslated =
+                    button.dataset.translated === "true";
+
+                // 元に戻す
+                if (isTranslated) {
+
+                    commentElement.innerText =
+                        originalText;
+
+                    button.dataset.translated =
+                        "false";
+
+                    button.innerText =
+                        ui.translate;
+
+                    return;
+                }
+
+                try {
+
+                    if (typeof LanguageModel === "undefined") {
+                        alert("Prompt APIが使えません");
+                        return;
+                    }
+
+                    const availability =
+                        await LanguageModel.availability();
+
+                    if (availability !== "available") {
+                        alert(ui.unavailable);
+                        return;
+                    }
+
+                    button.innerText =
+                        ui.translating;
+
+                    const session =
+                        await LanguageModel.create({
+                            outputLanguage: language
+                        });
+
+                    const translatedText =
+                        await session.prompt(`
+        Translate the following text into ${language}.
+        Return only the translated text.
+
+        ${originalText}
+        `);
+
+                    commentElement.innerText =
+                        translatedText;
+
+                    button.dataset.translated =
+                        "true";
+
+                    button.innerText =
+                        ui.translated;
+
+                    session.destroy();
+                }
+                catch (err) {
+
+                    console.error(err);
+
+                    button.innerText =
+                        ui.error;
+                }
+
+            });
+
+        });
+
     </script>
+
 }

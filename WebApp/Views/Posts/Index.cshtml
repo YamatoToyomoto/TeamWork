@@ -42,35 +42,39 @@
 
             <div class="post-card-body">
 
-                <h2>📍 @post.PlaceName</h2>
+                <h2 class="place-name"
+                    data-original="@post.PlaceName">
+                    📍 @post.PlaceName
+                </h2>
 
-                <p class="post-description">
+                <p class="post-description"
+                   data-original="@post.LocationText">
                     @post.LocationText
                 </p>
+
+                <button type="button"
+                        class="translate-btn"
+                        data-translated="false">
+                    🌐 翻訳
+                </button>
 
                 <p class="post-author">
                     <span data-i18n="author">投稿者</span>
                     :@post.User?.UserName
-
                 </p>
 
                 <p class="post-date">
                     @(post.CreatedAt
                         .ToLocalTime()
                         .ToString("yyyy/MM/dd"))
-
                 </p>
 
                 <a asp-action="Details"
                    asp-route-id="@post.Id"
                    class="post-detail-btn"
                    data-i18n="detail">
-
                     詳細を見る
-
                 </a>
-
-
 
             </div>
 
@@ -78,3 +82,122 @@
     }
 
 </div>
+@section Scripts {
+
+    <script>
+            document.querySelectorAll(".translate-btn")
+            .forEach(button => {
+
+            button.addEventListener("click", async () => {
+
+                const card =
+                    button.closest(".post-card");
+
+                const placeElement =
+                    card.querySelector(".place-name");
+
+                const descriptionElement =
+                    card.querySelector(".post-description");
+
+                const placeText =
+                    placeElement.dataset.original;
+
+                const descriptionText =
+                    descriptionElement.dataset.original;
+
+                const language =
+                    localStorage.getItem("language") ?? "en";
+
+                const ui =
+                    translations[language] ?? translations.en;
+
+                const isTranslated =
+                    button.dataset.translated === "true";
+
+                // 翻訳済みなら原文へ戻す
+                if (isTranslated) {
+
+                    placeElement.innerText =
+                        "📍 " + placeText;
+
+                    descriptionElement.innerText =
+                        descriptionText;
+
+                    button.dataset.translated =
+                        "false";
+
+                    button.innerText =
+                        ui.translate;
+
+                    return;
+                }
+
+                try {
+
+                    if (typeof LanguageModel === "undefined") {
+                        alert("Prompt APIが使えません");
+                        return;
+                    }
+
+                    const availability =
+                        await LanguageModel.availability();
+
+                    if (availability !== "available") {
+                        alert(ui.unavailable);
+                        return;
+                    }
+
+                    button.innerText =
+                        ui.translating;
+
+                    const session =
+                        await LanguageModel.create({
+                            outputLanguage: language
+                        });
+
+                    const translatedPlace =
+                        await session.prompt(`
+        Translate the following Japanese text into ${language}.
+        Return only the translated text.
+
+        ${placeText}
+        `);
+
+                    const translatedDescription =
+                        await session.prompt(`
+        Translate the following Japanese text into ${language}.
+        Return only the translated text.
+
+        ${descriptionText}
+        `);
+
+                    placeElement.innerText =
+                        "📍 " + translatedPlace;
+
+                    descriptionElement.innerText =
+                        translatedDescription;
+
+                    button.dataset.translated =
+                        "true";
+
+                    button.innerText =
+                        ui.translated;
+
+                    session.destroy();
+
+                }
+                catch (err) {
+
+                    console.error(err);
+
+                    button.innerText =
+                        ui.error;
+                }
+
+            });
+
+        });
+
+    </script>
+
+}

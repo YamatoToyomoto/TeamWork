@@ -95,6 +95,7 @@
                             <a asp-controller="Account"
                                asp-action="Login"
                                class="login-btn"
+                               asp-route-returnUrl="@Context.Request.Path@Context.Request.QueryString"
                                data-i18n="login">
                                 ログイン
                             </a>
