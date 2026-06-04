@@ -10,9 +10,12 @@
 
     <div class="register-card">
 
-        <h1>📝 新規登録</h1>
+        <h1 data-i18n="register_title">
+            📝 新規登録
+        </h1>
 
-        <p class="register-subtitle">
+        <p class="register-subtitle"
+           data-i18n="register_subtitle">
             アカウントを作成して投稿を始めましょう
         </p>
 
@@ -20,7 +23,9 @@
 
             <div class="form-group">
 
-                <label>ユーザー名</label>
+                <label data-i18n="username">
+                    ユーザー名
+                </label>
 
                 <input asp-for="UserName"
                        class="form-input" />
@@ -33,7 +38,9 @@
 
             <div class="form-group">
 
-                <label>メールアドレス</label>
+                <label data-i18n="email">
+                    メールアドレス
+                </label>
 
                 <input asp-for="Email"
                        class="form-input" />
@@ -46,7 +53,9 @@
 
             <div class="form-group">
 
-                <label>パスワード</label>
+                <label data-i18n="password">
+                    パスワード
+                </label>
 
                 <input asp-for="Password"
                        type="password"
@@ -59,10 +68,9 @@
             </div>
 
             <button type="submit"
-                    class="register-btn">
-
+                    class="register-btn"
+                    data-i18n="register">
                 登録する
-
             </button>
 
         </form>
@@ -73,15 +81,14 @@
 
         <div class="login-area">
 
-            <p>
+            <p data-i18n="already_account">
                 すでにアカウントをお持ちですか？
             </p>
 
             <a asp-action="Login"
-               class="login-link">
-
+               class="login-link"
+               data-i18n="login_here">
                 ログインはこちら
-
             </a>
 
         </div>

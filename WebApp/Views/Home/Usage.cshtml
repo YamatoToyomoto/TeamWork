@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "How to Use";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4" data-i18n="usage_title">📖 使い方ガイド</h1>
+        <p class="lead" data-i18n="usage_subtitle">Trash Spotを上手に活用して、街をきれいにしましょう</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div class="display-1 text-primary mb-3">📍</div>
+                    <h3 class="card-title h4" data-i18n="step1_title">1. ゴミ箱を見つける</h3>
+                    <p class="card-text text-muted" data-i18n="step1_text">街中や観光地でゴミ箱を見つけたら、その場所をチェックしましょう。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div class="display-1 text-success mb-3">📸</div>
+                    <h3 class="card-title h4" data-i18n="step2_title">2. 情報を投稿する</h3>
+                    <p class="card-text text-muted" data-i18n="step2_text">場所、写真、説明を入力して投稿します。みんなが分かりやすいように詳しく書くのがコツです。</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div class="display-1 text-warning mb-3">👀</div>
+                    <h3 class="card-title h4" data-i18n="step3_title">3. みんなの投稿を見る</h3>
+                    <p class="card-text text-muted" data-i18n="step3_text">他の人が投稿したゴミ箱情報を確認できます。コメントで情報を補足することも可能です。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 p-4 bg-light rounded-3 text-center shadow-sm">
+        <p class="mb-0 fw-bold text-dark" data-i18n="usage_footer">みんなで協力して、ポイ捨てのない綺麗な街を作りましょう！</p>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary" data-i18n="back_to_home">ホームに戻る</a>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+    </style>
+}
