@@ -36,6 +36,9 @@ const translations = {
 
 
         // ---- 翻訳中 ----
+        translate: "🌐 翻訳",
+        translated: "✅ 翻訳済",
+        original: "↩ 原文",
         translating: "翻訳中...",
         error: "翻訳に失敗しました",
         unavailable: "AIモデルが利用できません",
@@ -144,6 +147,9 @@ const translations = {
 
 
         // ---- 翻訳中 ----
+        translate: "🌐 Translate",
+        translated: "✅ Translated",
+        original: "↩ Original",
         translating: "Translating...",
         error: "Translation failed",
         unavailable: "AI model is not available",
@@ -256,6 +262,9 @@ const translations = {
 
 
         // ---- 翻訳中 ----
+        translate: "🌐 Dịch",
+        translated: "✅ Đã dịch",
+        original: "↩ Bản gốc",
         translating: "Đang dịch...",
         error: "Dịch thất bại",
         unavailable: "Không thể sử dụng AI",
