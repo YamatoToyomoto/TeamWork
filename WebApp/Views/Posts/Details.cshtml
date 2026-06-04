@@ -1,5 +1,4 @@
 ﻿@model WebApp.ViewModels.PostDetailsViewModel
-<p>@Model.Post.ImagePath</p>
 
 <div class="detail-card">
 
@@ -48,17 +47,15 @@
                    name="postId"
                    value="@Model.Post.Id" />
 
-            <textarea name="commentText"
-                      rows="4"
-                      required></textarea>
+        <div class="comment-input-wrapper">
 
-            <br />
+            <textarea name="commentText" required></textarea>
 
-            <button type="submit"
-                    class="btn-custom btn-edit">
-                コメント追加
+            <button type="submit" class="comment-submit-btn">
+                追加
             </button>
 
+        </div>
         </form>
 
         <h3>コメント一覧</h3>
