@@ -15,49 +15,99 @@
 <body>
     <header>
         @* <main>@RenderBody()</main> *@
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-success border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light border-bottom box-shadow mb-3">
             @{
                 var userName = Context.Session.GetString("UserName");
             }
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand custom-brand"
+                   asp-controller="Home"
+                   asp-action="Index">
+                    ♻️ Trash Spot
+                </a>
+                
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarContent"
+                        aria-expanded="false">
+
                     <span class="navbar-toggler-icon"></span>
+
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index" data-i18n="home">ホーム</a>
+                            <a class="nav-link custom-link
+                                @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index"
+                               && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home"
+                               ? "active-link" : "")"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                🏠 ホーム
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy" data-i18n="privacy">プライバシー</a>
+                            <a class="nav-link custom-link
+                                @(ViewContext.RouteData.Values["Action"]?.ToString() == "Privacy"
+                               ? "active-link" : "")"
+                               asp-controller="Home"
+                               asp-action="Privacy">
+                                📄 利用規約
+                            </a>
 
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link custom-link
+                                @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index"
+                               && ViewContext.RouteData.Values["Controller"]?.ToString() == "Posts"
+                               ? "active-link" : "")"
+                               asp-controller="Posts"
+                               asp-action="Index">
+                                📝 投稿一覧
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link custom-link
+                                @(ViewContext.RouteData.Values["Action"]?.ToString() == "Create"
+                               ? "active-link" : "")"
+                               asp-controller="Posts"
+                               asp-action="Create">
+                                ➕ 新規投稿
+                            </a>
+                        </li>
+
                     </ul>
 
-                    <div class="d-flex align-items-center gap-3">
+                    <hr class="mobile-divider" />
+
+                    <div class="header-right">
 
                         @if (userName == null)
                         {
-                            <span class="text-white" data-i18n="guest">👤 Guest</span>
+                            <span class="guest-user" data-i18n="guest">
+                                👤 Guest
+                            </span>
 
                             <a asp-controller="Account"
                                asp-action="Login"
-                               class="btn btn-light btn-sm"
+                               class="login-btn"
                                data-i18n="login">
                                 ログイン
                             </a>
                         }
                         else
                         {
-                            <span class="text-white">
+                            <span class="user-name">
                                 👤 @userName
                             </span>
 
                             <a asp-controller="Account"
                                asp-action="Logout"
-                               class="btn btn-outline-light btn-sm"
+                               class="logout-btn"
                                data-i18n="logout">
                                 ログアウト
                             </a>
@@ -124,6 +174,24 @@
 
     </script>
 
+    <script>
+
+        window.addEventListener("scroll", function () {
+
+        const navbar =
+        document.querySelector(".navbar");
+
+        if (window.scrollY > 50)
+        {
+        navbar.classList.add("navbar-small");
+        }
+        else
+        {
+        navbar.classList.remove("navbar-small");
+        }
+        });
+
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
