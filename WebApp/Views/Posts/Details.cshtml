@@ -1,178 +1,140 @@
-﻿@model WebApp.ViewModels.PostDetailsViewModel
+@model WebApp.ViewModels.PostDetailsViewModel
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Detail.css" />
+}
 
 @{
     var currentUserId = Context.Session.GetInt32("UserId");
     var currentRole = Context.Session.GetString("Role");
 }
 
-<div class="detail-card">
-
-    <h1 class="place-title"
-        id="placeName"
-        data-original="@Model.Post.PlaceName">
-        @Model.Post.PlaceName
-    </h1>
-
-    <div class="post-date">
-        📅
-        @(Model.Post.CreatedAt
-            .ToLocalTime()
-            .ToString("yyyy年M月d日"))
-    </div>
-
-    <div class="detail-image-area">
-
-        <img src="@Url.Content(Model.Post.ImagePath)"
-             class="detail-post-image"
-             alt="投稿画像">
-
-    </div>
-
-    <div class="description-card">
-
-        <div class="description-header">
-            <button type="button"
-                    id="translateButton"
-                    class="translate-btn"
-                    data-translated="false"
-                    data-i18n="translate">
-                🌐 翻訳
-            </button>
-
+<div class="detail-container">
+    <div class="detail-main-layout">
+        <!-- 左側：画像エリア -->
+        <div class="detail-image-panel">
+            <img src="@Url.Content(Model.Post.ImagePath)" class="detail-post-image" alt="投稿画像">
         </div>
 
-
-        <div class="description"
-             id="locationText"
-             data-original="@Model.Post.LocationText">
-
-            @Model.Post.LocationText
-
-        </div>
-
-    </div>
-
-</div>
-<hr />
-
-<div class="comment-section">
-
-    <h2 data-i18n="comments">
-        コメント
-    </h2>
-
-    <form asp-action="AddComment" method="post">
-
-        <input type="hidden"
-                name="postId"
-                value="@Model.Post.Id" />
-
-    <div class="comment-input-wrapper">
-
-        <textarea name="commentText" required></textarea>
-
-            <button type="submit" class="comment-submit-btn">
-                🛪
-        </button>
-
-    </div>
-    </form>
-
-    <h3 data-i18n="comment_list">
-        コメント一覧
-    </h3>
-
-    @foreach (var comment in Model.Comments)
-    {
-        <div class="comment-box">
-
-            <div class="comment-header">
-
-                <small>
-                    @(comment.CreatedAt
-                        .ToLocalTime()
-                        .ToString("yyyy/MM/dd"))
-                </small>
-
-                <button type="button"
-                        class="comment-translate-btn"
-                        data-i18n="translate">
-                    🌐 翻訳
-                </button>
-
+        <!-- 右側：情報・コメントエリア -->
+        <div class="detail-info-panel">
+            <div class="detail-header">
+                <h1 class="place-title" id="placeName" data-original="@Model.Post.PlaceName">
+                    @Model.Post.PlaceName
+                </h1>
+                <div class="post-meta">
+                    <span>📅 @(Model.Post.CreatedAt.ToLocalTime().ToString("yyyy年M月d日"))</span>
+                    @if (Model.Post.User != null)
+                    {
+                        <span>👤 @Model.Post.User.UserName</span>
+                    }
+                </div>
             </div>
 
-            <p class="comment-text"
-               data-original="@comment.CommentText">
-                @comment.CommentText
-            </p>
+            <div class="description-card">
+                <div class="description-header">
+                    <h5 style="margin:0; font-weight: 700; color: var(--text-muted);" data-i18n="description">場所説明</h5>
+                    <button type="button" id="translateButton" class="translate-btn" data-translated="false" data-i18n="translate">
+                        🌐 翻訳
+                    </button>
+                </div>
+                <div class="description"
+                     id="locationText"
+                     data-original="@Model.Post.LocationText">
+                    @Model.Post.LocationText
+                </div>
+            </div>
 
-            <form asp-action="DeleteComment"
-                  method="post">
+            <div class="button-area">
+                @if (currentUserId == Model.Post.UserId || currentRole == "Admin")
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Post.Id" class="btn-custom btn-edit" data-i18n="edit">
+                        編集
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Post.Id" class="btn-custom btn-delete" onclick="return confirm('本当に削除しますか？');" data-i18n="delete">
+                        削除
+                    </a>
+                }
+                <a asp-action="Index" class="btn-custom btn-back" data-i18n="back_to_list">
+                    一覧へ戻る
+                </a>
+            </div>
 
-                <input type="hidden"
-                       name="id"
-                       value="@comment.Id" />
+            <div class="comment-section-wrapper">
+                <div class="comment-section-header">
+                    <h2 class="comment-section-title">
+                        💬 <span data-i18n="comments">コメント</span>
+                    </h2>
+                    <button type="button" id="toggleCommentInput" class="comment-toggle-btn" title="コメントを書く">
+                        <span class="icon">✍️</span>
+                    </button>
+                </div>
 
-                <input type="hidden"
-                       name="postId"
-                       value="@Model.Post.Id" />
+                <div class="comment-input-area" id="commentInputArea" style="display: none;">
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" name="postId" value="@Model.Post.Id" />
+                        <div class="comment-input-wrapper">
+                            <textarea name="commentText" required placeholder="コメントを入力..." data-i18n-placeholder="comment_placeholder"></textarea>
+                            <button type="submit" class="comment-submit-btn">
+                                ✈
+                            </button>
+                        </div>
+                    </form>
+                </div>
 
-                <button type="submit"
-                        class="btn-custom btn-delete"
-                        onclick="return confirm('コメントを削除しますか？');">
-                    削除
-                </button>
+                <div class="comment-list-container">
+                    <h3 class="comment-list-title" data-i18n="comment_list">コメント一覧</h3>
 
-            </form>
+                    <div class="comment-scroll-area">
+                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+                        {
+                            <div class="comment-box">
+                                <div class="comment-header">
+                                    <div class="comment-info">
+                                        <span class="comment-date">
+                                            @(comment.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm"))
+                                        </span>
+                                    </div>
+                                    <button type="button" class="comment-translate-btn" data-i18n="translate" data-translated="false">
+                                        🌐 翻訳
+                                    </button>
+                                </div>
 
+                                <p class="comment-text" data-original="@comment.CommentText">
+                                    @comment.CommentText
+                                </p>
+
+                                <div class="comment-footer">
+                                    <form asp-action="DeleteComment" method="post">
+                                        <input type="hidden" name="id" value="@comment.Id" />
+                                        <input type="hidden" name="postId" value="@Model.Post.Id" />
+                                        <button type="submit" class="btn-custom btn-delete" onclick="return confirm('コメントを削除しますか？');">
+                                            削除
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-    }
-
+    </div>
 </div>
-
-@if (currentUserId == Model.Post.UserId ||
-     currentRole == "Admin")
-{
-    <div class="button-area">
-
-        <a asp-action="Edit"
-           asp-route-id="@Model.Post.Id"
-           class="btn-custom btn-edit"
-           data-i18n="edit">
-            編集
-        </a>
-
-        <a asp-action="Delete"
-           asp-route-id="@Model.Post.Id"
-           class="btn-custom btn-delete"
-           onclick="return confirm('本当に削除しますか？');"
-           data-i18n="delete">
-            削除
-        </a>
-
-        <a asp-action="Index"
-           class="btn-custom btn-back"
-           data-i18n="back_to_list">
-            一覧へ戻る
-        </a>
-
-    </div>
-}
-else
-{
-    <div class="button-area">
-        <a asp-action="Index"
-           class="btn-custom btn-back"
-           data-i18n="back_to_list">
-            一覧へ戻る
-        </a>
-    </div>
-}
 
 @section Scripts {
 
     <script>
+        // コメント入力エリアのトグル
+        document.getElementById("toggleCommentInput").addEventListener("click", () => {
+            const inputArea = document.getElementById("commentInputArea");
+            if (inputArea.style.display === "none") {
+                inputArea.style.display = "block";
+                inputArea.querySelector("textarea").focus();
+            } else {
+                inputArea.style.display = "none";
+            }
+        });
 
         const button =
             document.getElementById("translateButton");
