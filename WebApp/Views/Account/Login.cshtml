@@ -1,37 +1,74 @@
 ﻿@model WebApp.ViewModels.LoginViewModel
 
-<h1>ログイン</h1>
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+}
 
-<form method="post">
+<div class="login-container">
 
-    <input type="hidden"
-           name="returnUrl"
-           value="@ViewBag.ReturnUrl" />
+    <div class="login-card">
 
-    <div>
-        <label>メールアドレス</label>
-        <input asp-for="Email" />
+        <h1>🔑 ログイン</h1>
+
+        <p class="login-subtitle">
+            ごみ箱情報共有サービスへようこそ
+        </p>
+
+        <form method="post">
+
+            <input type="hidden"
+                   name="returnUrl"
+                   value="@ViewBag.ReturnUrl" />
+
+            <div class="form-group">
+
+                <label>メールアドレス</label>
+
+                <input asp-for="Email"
+                       class="form-input" />
+
+            </div>
+
+            <div class="form-group">
+
+                <label>パスワード</label>
+
+                <input asp-for="Password"
+                       type="password"
+                       class="form-input" />
+
+            </div>
+
+            <button type="submit"
+                    class="login-btn">
+
+                ログイン
+
+            </button>
+
+        </form>
+
+        <div asp-validation-summary="All"
+             class="text-danger validation-box">
+        </div>
+
+        <div class="register-area">
+
+            <p>
+                アカウントをお持ちでない方
+            </p>
+
+            <a asp-action="Register"
+               class="register-link">
+
+                新規登録はこちら
+
+            </a>
+
+        </div>
+
     </div>
 
-    <br />
-
-    <div>
-        <label>パスワード</label>
-        <input asp-for="Password" type="password" />
-    </div>
-
-    <br />
-
-    <button type="submit">
-        ログイン
-    </button>
-
-    <p>
-        アカウントをお持ちでない方は
-        <a asp-action="Register">
-            新規登録
-        </a>
-    </p>
-</form>
-
-<div asp-validation-summary="All"></div>
+</div>
